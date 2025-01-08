@@ -106,9 +106,6 @@ const setAxisLabel = (sum, iChartOption, baseOpt) => {
 const handleLabelFormatter = (iChartOption, baseOpt) => {
     let { max, data, fill = false, type = 'base' } = iChartOption;
     const { angleAxis } = baseOpt;
-    if (type === 'process') {
-        fill = true;
-    }
     // 有标定值
     if (max) {
         // 第一种数据类型
@@ -122,10 +119,7 @@ const handleLabelFormatter = (iChartOption, baseOpt) => {
     }
     // 无标定值
     else {
-        if (type === 'process') {
-            angleAxis.max = 100;
-            angleAxis.sum = 100;
-        } else if (type === 'base') {
+        if (type === 'base') {
             // 第一种数据类型
             setNoChildDefaultMax(data, angleAxis, fill);
         } else {
@@ -151,10 +145,6 @@ const handleLabelFormatter = (iChartOption, baseOpt) => {
         case undefined:
             formatter = setAxisLabel(angleAxis.sum, iChartOption, baseOpt);
             break;
-    }
-    if (type === 'process') {
-        angleAxis.axisLabel.show = false;
-        return;
     }
     angleAxis.axisLabel.formatter = formatter;
     angleAxis.axisTick.show = true; // 展示刻度线

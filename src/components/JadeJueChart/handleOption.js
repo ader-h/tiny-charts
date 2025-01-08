@@ -74,10 +74,6 @@ function handleJadeJueFormatter(JadeJueTooltip, baseOpt, type) {
     let htmlString = '';
     let value = params.data.beforeChangeValue;
     let name = params.data.name || params.name;
-    if (type === 'process') {
-      value = baseOpt.series[params.seriesIndex].beforeChangeValue;
-      name = baseOpt.series[params.seriesIndex].name;
-    }
     htmlString +=
       `<span style="display:inline-block;margin-right:5px;margin-left:8px;border-radius:50%;height:10px;">${defendXSS(name)}</span>` +
       '<br/>' +
@@ -110,26 +106,17 @@ export function handleMinRatio(iChartOption, baseOpt, type) {
   const { barMinRatio, data, tipHtml } = iChartOption;
   if (barMinRatio) {
     const minValue = (barMinRatio * baseOpt.angleAxis.sum) / 100;
-    if (type === 'process') {
-      baseOpt.series.forEach(item => {
-        item.beforeChangeValue = item.data[0];
-        if (item.data[0] <= minValue) {
-          item.data[0] = minValue;
+    baseOpt.series.forEach((series, index) => {
+      series.data.forEach((dataItem, index_) => {
+        if (series.name === dataItem.name) {
+          dataItem.beforeChangeValue = dataItem.value;
+          if (dataItem.value <= minValue) {
+            dataItem.value = minValue;
+            data[index].value = minValue;
+          }
         }
       });
-    } else {
-      baseOpt.series.forEach((series, index) => {
-        series.data.forEach((dataItem, index_) => {
-          if (series.name === dataItem.name) {
-            dataItem.beforeChangeValue = dataItem.value;
-            if (dataItem.value <= minValue) {
-              dataItem.value = minValue;
-              data[index].value = minValue;
-            }
-          }
-        });
-      });
-    }
+    });
     // 配置了barMinRatio会修改data中的value值，需要重新设置tooltip进行覆盖
     baseOpt.tooltip = setTooltip(tipHtml, baseOpt, type);
   }
