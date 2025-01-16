@@ -86,15 +86,15 @@ export function setGradientColor(baseOpt, color, gradientColor, opacity, iChartO
             colorStops: [
               {
                 offset: 0,
-                color: codeToRGB(codeToHex(gradientColor[params.dataIndex % gradientColor.length]), opacity || 0.8),
+                color: !opacity ? gradientColor[params.dataIndex % gradientColor.length] : codeToRGB(codeToHex(gradientColor[params.dataIndex % gradientColor.length]), opacity || 0.8),
               },
               {
                 offset: 1,
-                color: codeToRGB(
+                color: !opacity ? iChartOption.color[params.dataIndex % gradientColor.length] : codeToRGB(
                   codeToHex(iChartOption.color[params.dataIndex % iChartOption.color.length]),
                   opacity || 0.8,
                 ),
-              },
+              }
             ],
             globalCoord: false,
           };
