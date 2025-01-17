@@ -67,6 +67,7 @@ function getModelToken(aliasToken) {
     colorFill,
     axisLineWidthSecondary,
     labelFontSize,
+    labelLineHeight,
     colorTextTertiary,
     borderRadius,
     paddingSM,
@@ -323,7 +324,8 @@ function getModelToken(aliasToken) {
     markLineLabelPadding: [paddingSM, paddingSM * 2, paddingSM, paddingSM * 2],
     // 标记线文本borderWidth
     markLineLabelBorderWidth: borderWidthLG,
-
+    // 标记线文本行高
+    markLineLabelLineHeight: labelLineHeight,
 
     /** ----- dataZoom------ */
     // dataZoom边框色

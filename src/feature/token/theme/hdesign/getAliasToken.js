@@ -187,6 +187,8 @@ function getAliasToken(globalToken, light = true) {
     labelFontSize: fontSizeBase,
     // labelLine的长度
     labelLineLength: size6x,
+    // labelLine的行高
+    labelLineHeight: size5x,
     // 边框 细
     borderWidth: borderBase,
     // 边框
