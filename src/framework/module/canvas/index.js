@@ -74,10 +74,25 @@ class CanvasManager {
                     // 判断事件发生的位置是否在this.container内
                     if (self.container.contains(event.target)) {
                         event.preventDefault();
-                        self.bindMouseWheel(event)
+                        self.bindMouseWheel(event);
                     }
                 }.bind(this.container), { passive: false });
+                // ctrl + 滚轮
+                window.addEventListener('wheel', function (event) {
+                    if (event.ctrlKey) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        if(self.container.contains(event.target)){
+                            self.bindMouseWheel(event);
+                        }
+                    }
+                }, { passive: false });
             } 
+            window.addEventListener('resize', function (event) {
+                // 更新外容器相关参数 和 node圆心
+                self.containerRect = self.dom.getBoundingClientRect();
+                self.setNodeContainerCenter();
+            }, { passive: false });
             this.dom.addEventListener('mouseleave', this.bindMouseLeave.bind(this));
         }
         // 初始化设置画布位置到屏幕正中心
