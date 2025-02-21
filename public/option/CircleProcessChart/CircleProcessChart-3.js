@@ -23,28 +23,6 @@ const option = {
     show: false,
   },
   title: {
-    text: '{value|65}{unit|%}',
-    subtext: '问题IP',
-    itemGap: -18,
-    textStyle: {
-      fontWeight: 'bold',
-      rich: {
-        value: {
-          padding: [-20, 0, 0, 0],
-          fontSize: 60,
-          color: '#191919',
-        },
-        unit: {
-          fontSize: 16,
-          color: '#191919',
-          fontWeight: 'bolder',
-          padding: [0, 0, 0, 6]
-        },
-      }
-    },
-    subtextStyle: {
-      fontSize: 20,
-      color: '#777777',
-    }
+    show:true
   }
 };

@@ -8,13 +8,13 @@ import positionMd from './position.md?raw';
 import itemStyleMd from './itemStyle.md?raw';
 import markLineMd from './markLine.md?raw';
 import maxMd from './max.md?raw';
-import { titleMd, title } from '../common/title'
+import titleMd from './title.md?raw'
 
 const data = {
     dataset: [
         theme,
         color,
-        title,
+        ['title', '中心文本配置', 'object', '无'],
         legend,
         tooltip,
         event,
