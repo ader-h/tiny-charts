@@ -10,7 +10,6 @@
  *
  */
 import defendXSS from '../../util/defendXSS';
-import merge from '../../util/merge';
 import chartToken from './chartToken';
 // 获取bar的series数据
 export function getSeriesData(data) {
@@ -45,51 +44,25 @@ export function setTooltip(baseOpt) {
   }
 }
 
-function getDefaultTitle(title) {
-  let defaultTitle = {
-    show: true,
-    itemGap: -18,
-    subtext: '已完成',
-    textStyle: {
-      fontWeight: 'bold',
-      rich: {
-        value: {
-          padding: [-20, 0, 0, 0],
-          fontSize: 60,
-          color: chartToken.detailRichColor,
-        },
-        unit: {
-          fontSize: 16,
-          color: chartToken.detailRichColor,
-          fontWeight: 'bolder',
-          padding: [0, 0, 0, 6]
-        },
-      }
-    },
-    subtextStyle: {
-      fontSize: 20,
-      color: chartToken.descRichColor
-    }
-  };
-  return merge(defaultTitle, title);
-}
-
 /**
  * 配置Title
  */
-export function setTitle(baseOption, iChartOption) {
-  const { title, data } = iChartOption;
-  const defaultTitle = getDefaultTitle(title);
-  const total = data.reduce((a, b) => a + Number(b.value), 0);
-  const text = title?.text !== undefined ? title.text : total;
-  if (!title?.text || (title?.text?.indexOf('{') == -1 && title?.text?.indexOf('|') == -1)) {
-    // 完全自定义 直接使用用户配置 例: text:'{value|65}{unit|%}'
-    defaultTitle.text = title?.unit !== undefined ? `{value|${text}}{unit|${title.unit}}` : `{value|${text}}{unit|%}`;
+export function setTitle(iChartOption) {
+  const { title } = iChartOption;
+  if (!title.subtextStyle || !title.subtextStyle?.color) {
+    if (!title.subtextStyle) title.subtextStyle = {}
+    title.subtextStyle.color = chartToken.descRichColor
   }
-  // 没有subtext 调整text的位置
-  if (title?.subtext === '' && defaultTitle.textStyle.rich) {
-    defaultTitle.textStyle.rich.value.padding = [0, 0, 0, 0];
-    defaultTitle.textStyle.rich.unit.padding = [20, 0, 0, 6];
+  if (!title.textStyle || !title.textStyle?.color) {
+    if (!title.textStyle) title.textStyle = {}
+    title.textStyle.color = chartToken.detailRichColor
   }
-  baseOption.title = merge(baseOption.title, defaultTitle);
+  if (title.textStyle && title.textStyle.rich) {
+    for (const key in title.textStyle.rich) {
+      const element = title.textStyle.rich[key];
+      if (!element.color) {
+        element.color = chartToken.detailRichColor
+      }
+    }
+  }
 }

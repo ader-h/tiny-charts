@@ -43,7 +43,7 @@ export default class CircleProcessChart {
     this.baseOption.series = setSeries(seriesData, iChartOption, chartInstance);
     // 范围设置
     this.baseOption.angleAxis.max = iChartOption.max || 100;
-    if( this.baseOption.title?.show ) setTitle(this.baseOption, iChartOption);
+    if( this.baseOption.title) setTitle(iChartOption);
     mergeSeries(iChartOption, this.baseOption);
     mini(iChartOption, this.baseOption);
   }
