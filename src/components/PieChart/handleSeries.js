@@ -41,7 +41,7 @@ export const seriesInit = () => {
  */
 function setPieRadius(pieType, radius, chartInstance) {
   if (radius) {
-    if(pieType === 'circle' && radius.length === 1){
+    if(pieType === 'circle' && !(isArray(radius) && radius.length === 2)){
       return setPieCircleRadius(radius, chartInstance);
     }else{
       return radius;
@@ -75,11 +75,11 @@ function setPieCircleRadius(radius, chartInstance){
   const height = chartInstance.getHeight();
   const canvasRadius = width > height ? height / 2 : width / 2;
   const barWidth = chartToken.barWidth
-  let outerRing = radius[1] || radius[0];
-   if (outerRing.indexOf('%') > -1) {
+  let outerRing = isArray(radius) ? radius[1] || radius[0] : radius;
+  if (isString(outerRing) && outerRing.indexOf('%') > -1) {
     outerRing = (Number(outerRing.slice(0, -1)) / 100) * canvasRadius;
   }
-  let innerRing = outerRing - barWidth;
+  let innerRing = Number(outerRing) - barWidth;
   return [innerRing, outerRing]
 }
 
