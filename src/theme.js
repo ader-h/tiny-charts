@@ -13,7 +13,7 @@ import Token from './feature/token';
 import { THEMES } from './feature/token';
 import cloneDeep from './util/cloneDeep';
 
-window.getConsoleContext?.().get?.({ name: 'theme' }).getThemeFlagAsync?.().then((theme) => {
+window.getConsoleContext?.().get?.({ name: 'theme' })?.getThemeFlagAsync?.().then((theme) => {
   const cftheme = theme === 'dark' ? 'cloud-dark' : 'cloud-light';
   Theme.init(cftheme);
 })
@@ -52,6 +52,7 @@ export default class Theme {
   // 初始化主题
   static init(theme) {
     this.globalName = theme;
+    Token.setDefaultTheme(theme);
   }
 
   // 设置主题
