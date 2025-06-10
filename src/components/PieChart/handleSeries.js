@@ -79,7 +79,7 @@ function setPieCircleRadius(radius, chartInstance){
   if (isString(outerRing) && outerRing.indexOf('%') > -1) {
     outerRing = (Number(outerRing.slice(0, -1)) / 100) * canvasRadius;
   }
-  let innerRing = Number(outerRing) - barWidth;
+  let innerRing = Number(outerRing) - barWidth - 2;
   return [innerRing, outerRing]
 }
 
