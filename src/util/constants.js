@@ -56,12 +56,12 @@ const TOKENCHARTNAMES = [
   'MindmapChart',
   'ChartCard',
   'BulletChart',
-  'ForceDirectedChart',
   'GridChart',
   'CircleChart',
   'LinearArcChart',
   'CircleArcChart',
-  'CustomizeChart'
+  'CustomizeChart',
+  'BarLineChart'
 ];
 
 // 默认主题
@@ -114,12 +114,12 @@ const CHART_TYPE = {
   WORD_CLOUD: 'WordCloudChart',
   CHART_CARD: 'ChartCard',
   MINDMAP: 'MindmapChart',
-  FORCE_DIRECTED: 'ForceDirectedChart',
   GRID: 'GridChart',
   CIRCLE: 'CircleChart',
   LINEARARC: 'LinearArcChart',
   CIRCLEARC: 'CircleArcChart',
-  CUSTOMIZE: 'CustomizeChart'
+  CUSTOMIZE: 'CustomizeChart',
+  BARLINE: 'BarLineChart'
 }
 
 const ADAPTIVE_THEME = ['hdesign-light', 'hdesign-dark', 'bpit-light', 'bpit-dark'];

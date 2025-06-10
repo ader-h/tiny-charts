@@ -14,12 +14,14 @@ function getAliasToken(globalToken, sceneToken) {
   const {
     fontSizeBase,
     fontSizeMd,
+    space05x,
     space2x,
     spaceBase,
     lineTypeSolid,
     borderNone,
     borderBase,
     border2x,
+    border4x,
     fontSizeLg,
     borderRadiusNone,
     fontSize4xl,
@@ -187,6 +189,8 @@ function getAliasToken(globalToken, sceneToken) {
     axisLineWidthSecondary: borderBase,
     // 刻度线线宽 1
     axisTickLineWidth: borderBase,
+    // 刻度线长度 2
+    axisTickLineLength: border4x + borderBase, // 长度 + 1
     // 分隔线线宽 1
     axisSplitLineWidth: borderBase,
     // 坐标轴指示器的标线线宽 1
@@ -219,6 +223,8 @@ function getAliasToken(globalToken, sceneToken) {
     containerGap: spaceBase,
     // 图例的间距
     legendSpace: space4x,
+    // 图例文字与图标的间距(只需要调整最后一位数)
+    legendTextAndIconSpace: (- space05x * 3) + space2x,
     // 无padding
     paddingNone: spaceNone,
     paddingSM: spaceBase,
