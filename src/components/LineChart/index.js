@@ -114,7 +114,10 @@ class LineChart {
     
     // 合并用户自定义series
     mergeSeries(this.iChartOption, this.baseOption);
+
   }
+
+  
 
   getOption() {
     return this.baseOption;

@@ -20,7 +20,6 @@ const BaseOption = (labelPosition) => {
     animation: true,
     series: [
       {
-        name:'data',
         nodeAlign: 'left',
         orient: 'horizontal',
         right: 0,
