@@ -32,6 +32,7 @@ function getAliasToken(globalToken, sceneToken) {
     size05x,
     size6x,
     size2x,
+    size3x,
     sizeBase,
     fontSize3xl
   } = globalToken;
@@ -50,6 +51,7 @@ function getAliasToken(globalToken, sceneToken) {
     colorTextDisabled,
     colorIconPrimary,
     colorIconDisabled,
+    colorIconActive,
     colorLine,
     colorLineSecondary,
     colorLinePointer,
@@ -104,6 +106,8 @@ function getAliasToken(globalToken, sceneToken) {
     colorIcon: colorIconPrimary,
     // 图标失效色
     colorIconInactive: colorIconDisabled,
+    // 图表激活态
+    colorIconActive: colorIconActive,
     // 坐标轴线颜色
     colorAxisLine: colorLine,
     // 刻度线颜色
@@ -225,6 +229,10 @@ function getAliasToken(globalToken, sceneToken) {
     legendSpace: space4x,
     // 图例文字与图标的间距(只需要调整最后一位数)
     legendTextAndIconSpace: (- space05x * 3) + spaceBase,
+    // 图例value字体大小
+    legendTextValueFontSize: fontSizeMd,
+    // 图例名称字体大小
+    legendTextNameFontSize: fontSizeBase,
     // 无padding
     paddingNone: spaceNone,
     paddingSM: spaceBase,
@@ -234,7 +242,7 @@ function getAliasToken(globalToken, sceneToken) {
     tipIconGap: sizeBase,
     tipValueGap: size2x,
     //中心文本主副标题间距
-    centerTitleSpace: space4x,
+    centerTitleSpace: spaceBase,
     // -----------------------------------------------------------------边框------------------------------------------------------------------------------
     // zoom数据区域边框
     zoomDataAreaBorderWidth: borderBase,
@@ -249,11 +257,13 @@ function getAliasToken(globalToken, sceneToken) {
     // 图元的边框
     symbolBorderWidth: border2x,
     // -------------------------------------------------------------size----------------------------------------------------------------------------------------
-    // 图元 
+    // 图元(线图) 
     symbolSize: size2x,
-    // 雷达图专用
+    // 雷达图和箱型图使用
     symbolSizeSecondary: size2x - 2,
-    // 图元  线形图用
+    // 散点图使用
+    symbolSizeTertiary: size3x,
+    // 图元  线形图离散点用
     symbolSizeSM: sizeBase,
     // 柱条的宽度
     barWidth: size2x,

@@ -11,6 +11,7 @@
  */
 import { getColor } from '../../util/color';
 import chartToken from './chartToken';
+import handleCenterPosition from '../PieChart/handleCenterPosition';
 
 function getSeriesInit(type) {
   const baseSeries = {
@@ -94,20 +95,29 @@ export function handleBarItemStyle(iChartOption, seriesUnit) {
  * @param {坐标} polar
  * @returns
  */
-export function setSeries(seriesData, labelData, iChartOption, polar, type) {
-  const { data, label } = iChartOption;
+export function setSeries(seriesData, labelData, iChartOption, polar, type, baseOption, chartInstance) {
+  const { data, label, itemStyle } = iChartOption;
+  const position = handleCenterPosition(iChartOption, baseOption.legend, chartInstance)
   const series = [];
   if (type === 'normal') {
     data.forEach((item, i) => {
       const seriesUnit = getSeriesInit(type)
       seriesUnit.name = item.name;
       seriesUnit.data = seriesData[i];
+      // 最小高度
+      if(itemStyle?.barMinHeight){
+        seriesUnit.barMinHeight = itemStyle.barMinHeight;
+      }
       series.push(seriesUnit);
     });
   } else {
     const seriesUnit = getSeriesInit(type)
     seriesUnit.data = seriesData;
     handleBarItemStyle(iChartOption, seriesUnit);
+    // 最小高度
+    if(itemStyle?.barMinHeight){
+      seriesUnit.barMinHeight = itemStyle.barMinHeight;
+    }
     series.push(seriesUnit);
   }
   // 需要显示角度轴坐标文本
@@ -115,13 +125,22 @@ export function setSeries(seriesData, labelData, iChartOption, polar, type) {
   if (showLabel && type === 'normal') {
     const pieUnit = getPieInit()
     pieUnit.data = labelData;
-    pieUnit.center = polar.center;
+    pieUnit.center = position?.center || polar.center;
     // 外radius
     const radius = polar.radius[1];
     const radiusN = Number(radius.substring(0, radius.length - 1));
-    pieUnit.radius = [radius, `${radiusN + 8}%`];
+    pieUnit.radius = position?.radius ? [position.radius*0.2, position.radius] : [radius, `${radiusN + 8}%`];
     series.push(pieUnit);
   }
+  if (position?.radius) {
+    iChartOption.position.radius = [position.radius*0.2, position.radius]
+    baseOption.polar.radius = [position.radius*0.2, position.radius];
+  }
+  if (position?.center) {
+    baseOption.polar.center = position.center;
+    iChartOption.position.center = position.center
+  }
+
   return series;
 }
 

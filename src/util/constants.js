@@ -61,7 +61,8 @@ const TOKENCHARTNAMES = [
   'LinearArcChart',
   'CircleArcChart',
   'CustomizeChart',
-  'BarLineChart'
+  'BarLineChart',
+  'RankProcessChart'
 ];
 
 // 默认主题
@@ -90,6 +91,7 @@ const CHART_TYPE = {
   HEAT_MAP: 'HeatMapChart',
   HILL: 'HillChart',
   HONEYCOMB: 'HoneycombChart',
+  RANKPROCESS: 'RankProcessChart',
   JADGEJUE: 'JadeJueChart',
   LINE: 'LineChart',
   AREA: 'AreaChart',
@@ -122,6 +124,6 @@ const CHART_TYPE = {
   BARLINE: 'BarLineChart'
 }
 
-const ADAPTIVE_THEME = ['hdesign-light', 'hdesign-dark', 'bpit-light', 'bpit-dark'];
+const ADAPTIVE_THEME = ['hdesign-light', 'hdesign-dark', 'cloud-light', 'cloud-dark', 'bpit-light', 'bpit-dark'];
 
 export { THEMES, CURRENT_THEME, DEFAULT_THEME_NAME, THEME_ERROR_TIP_MESSAGE, TOKENCHARTNAMES, CHART_TYPE, ADAPTIVE_THEME };

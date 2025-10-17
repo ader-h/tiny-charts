@@ -12,43 +12,51 @@
 import Token from '../../../feature/token';
 import merge from '../../../util/merge';
 
-function setPolymorphism(legend) {
+function setPolymorphism(legend, iChartOption) {
+  const theme = iChartOption.theme;
   const baseRich = {
     title: {
-        fontSize: Token.config.legendTextNameFontSize,
-        padding: [0, 0, 0, 5],
-        width: 80,
-        align:'left',
-        color: Token.config.legendTextNameColor 
+      fontSize: Token.config.legendTextNameFontSize,
+      padding: [0, 0, 0, 5],
+      align:'left',
+      color: Token.config.legendTextNameColor 
     },
     value1: {
-        fontSize: Token.config.textFontSize,
-        width: 20,
-        align:'right',
-        fontWeight: 'bold',
-        color: Token.config.legendTextValueColor
+      fontSize: Token.config.legendTextValueFontSize,
+      align:'right',
+      fontWeight: 'bold',
+      color: Token.config.legendTextValueColor
     },
     value2: {
-        fontSize: Token.config.textFontSize,
-        width: 20,
-        align:'right',
-        fontWeight: 'bold',
-        color: Token.config.legendTextValueColor
+      fontSize: Token.config.legendTextValueFontSize,
+      width: 'auto',
+      align: 'right',
+      fontWeight: 'bold',
+      color: Token.config.legendTextValueColor
     },
     split:{
-        padding:[0, 8, 0, 8],
-        align:'right',
-        color: Token.config.legendTextSplitColor  
+      fontSize: Token.config.legendTextValueFontSize,
+      width: 10,
+      padding: [0, 7, 0, 0],
+      align:'right',
+      color: Token.config.legendTextSplitColor  
     },
     value: {
-      fontSize: Token.config.textFontSize,
-      width: 20,
+      fontSize: Token.config.legendTextValueFontSize,
       align:'right',
       fontWeight: 'bold',
       color: Token.config.legendTextValueColor
     }
   }
-  
+  // 非自适应情况，默认宽度配置
+  if (!iChartOption.adaptive || (!theme.includes('cloud') && iChartOption.adaptive)) {
+    baseRich.title.width = 80;
+    baseRich.value1.width = 20;
+    baseRich.value.width = 20;
+  }
+  if (iChartOption.adaptive && theme.includes('cloud')) {
+    baseRich.title.padding = [0, 16, 0, 5];
+  }
   let rich = legend?.textStyle?.rich || {};
   legend.textStyle.rich = merge(baseRich, rich);
 }

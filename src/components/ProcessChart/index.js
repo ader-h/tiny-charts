@@ -18,6 +18,7 @@ import { handleGrid, handleYaxis, handleXaxis, handleDataZoom, handleLegend, han
 import handleSeries from './handleSeries';
 import cloneDeep from '../../util/cloneDeep';
 import { CHART_TYPE } from '../../util/constants';
+import { mergeSeries } from '../../util/merge';
 
 class ProcessChart {
 
@@ -41,7 +42,7 @@ class ProcessChart {
       throw new Error('ProcessChart must have a name');
     }
     // 加载默认的直角坐标系
-    RectCoordSys(this.baseOption, iChartOption, iChartOption.name);
+    RectCoordSys(this.baseOption, iChartOption, iChartOption.name, this.chartInstance);
     // 是否是基础双向进度图
     const doubleSide = iChartOption.name === CHARTTYPENAME.ProcessBarChart && iChartOption.type && iChartOption.type === PROCESSBARTYPE;
     const dataSet = handleData(iChartOption, doubleSide);
@@ -60,6 +61,8 @@ class ProcessChart {
     handleSeries(this.baseOption, iChartOption, dataSet, doubleSide);
 
     handleTooltip(this.baseOption, iChartOption, dataSet, doubleSide);
+    // 合并用户自定义series
+    mergeSeries(iChartOption, this.baseOption);
     // 处理特性
     mini(iChartOption, this.baseOption);
   }

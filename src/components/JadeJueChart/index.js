@@ -18,6 +18,7 @@ import PolarCoordSys from '../../option/PolarSys';
 import { setStartAngle, setbarWidth, handleLegendData, bindLegendEvent } from './handleOption';
 import { CHART_TYPE } from '../../util/constants';
 import handleCenterTitle from '../../option/config/polarTitle/handleCenterTitle';
+import { mergeSeries } from '../../util/merge';
 
 class JadeJueChart {
 
@@ -42,7 +43,7 @@ class JadeJueChart {
     // 对非堆叠类型数据取反（已对iChartOption进行深拷贝），实现数据从外向内展示（echarts默认为内向外）
     reverseData(iChartOption, this);
     // 装载除series之外的其他配置
-    PolarCoordSys(this.baseOption, iChartOption, CHART_TYPE.JADGEJUE);
+    PolarCoordSys(this.baseOption, iChartOption, CHART_TYPE.JADGEJUE, chartInstance);
     // 配置玉玦图的标定值和两种data下不同的angleAxis.sum和angleAxis.max
     handleLabelFormatter(iChartOption, this.baseOption, this.chartType);
     // 配置玉玦图的seriesData数据（value,name,color）
@@ -59,6 +60,8 @@ class JadeJueChart {
       let position = iChartOption.position || this.baseOption.polar;
       handleCenterTitle(position, chartInstance, this.baseOption, iChartOption);
     }
+    // 合并用户自定义series
+    mergeSeries(iChartOption, this.baseOption);
   }
 
   getOption() {
