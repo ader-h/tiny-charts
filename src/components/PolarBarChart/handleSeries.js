@@ -122,7 +122,7 @@ export function setSeries(seriesData, labelData, iChartOption, polar, type, base
   }
   // 需要显示角度轴坐标文本
   let showLabel = label ? label.show : true;
-  const adaptiveCloud = adaptive && theme.includes('cloud');
+  const adaptiveCloud = adaptive && theme.includes('hdesign');
   if (adaptive) showLabel = false;
   if (showLabel && type === 'normal') {
     const pieUnit = getPieInit()

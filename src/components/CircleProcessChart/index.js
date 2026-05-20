@@ -10,7 +10,7 @@
  *
  */
 import init from '../../option/init';
-import mini from '../../feature/mini/miniCircleProcessChart';
+import miniCircleProcess from '../../feature/mini/miniCircleProcessChart';
 import { getSeriesData, setTooltip, setTitle } from './handleOption';
 import { setSeries, updateMarkLine, setRadius } from './handleSeries';
 import PolarCoordSys from '../../option/PolarSys';
@@ -52,7 +52,7 @@ export default class CircleProcessChart {
       handleCenterTitle(position, chartInstance, this.baseOption, iChartOption);
     }
     mergeSeries(iChartOption, this.baseOption);
-    mini(iChartOption, this.baseOption);
+    miniCircleProcess(iChartOption, this.baseOption);
   }
 
   getOption() {

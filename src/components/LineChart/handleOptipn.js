@@ -144,8 +144,8 @@ function defaultFormatter(params, color, iChartOpt, hideEmpty, tooltip) {
     config.title = params.name
   }
   const isMobile = iChartOpt.isMobile || mobile();
-  const isCloud = iChartOpt.theme?.includes('cloud');
-  config.isMobile = iChartOpt.adaptive && isCloud && isMobile;
+  const isHdesign = iChartOpt.theme?.includes('hdesign');
+  config.isMobile = iChartOpt.adaptive && isHdesign && isMobile;
   return getTooltipContentHtmlStr(config, tooltip)
 }
 

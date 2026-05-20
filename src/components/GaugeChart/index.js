@@ -12,10 +12,11 @@
 import BaseOption from './BaseOption';
 import {handleSeries,handleSize,handleDetail,handleStatus,adapt} from './handleSeries';
 import cloneDeep from '../../util/cloneDeep';
-import { handleTooltip } from './handleOptipn';
+import { handleTooltip, setMiniGauge } from './handleOptipn';
 import { mergeSeries } from '../../util/merge';
 import init from '../../option/init'
 import { CHART_TYPE } from '../../util/constants';
+import setA2ui from '../../feature/a2ui';
 
 class GaugeChart {
 
@@ -25,6 +26,8 @@ class GaugeChart {
     this.baseOption = {};
     this.iChartOption = {};
     this.baseOption = cloneDeep(BaseOption);
+    this.chartName = CHART_TYPE.GAUGE;
+    this.dom = chartInstance._dom;
     // 组装 iChartOption, 补全默认值
     this.iChartOption = init(iChartOption);
     this.chartInstance = chartInstance;
@@ -45,6 +48,7 @@ class GaugeChart {
     // 合并用户自定义series
     this.baseOption.legend.show = false;
     adapt(iChartOption,this.baseOption,containerWidth,containerHeight);
+    setMiniGauge(this.baseOption, iChartOption);
     mergeSeries(iChartOption, this.baseOption);
   }
 
@@ -64,11 +68,13 @@ class GaugeChart {
     const series = this.baseOption.series[0];
     const sizeData = handleSize(series,radiusSize);
     const text = this.iChartOption.text || {};
+    setA2ui(this.iChartOption, this);
     // 中间文本
     handleDetail(series, text, this.iChartOption.data,sizeData);
     // 内置状态仪表盘
     handleStatus(series, this.iChartOption,radiusSize,text,sizeData);
     adapt(this.iChartOption,this.baseOption,containerWidth,containerHeight);
+    setMiniGauge(this.baseOption, this.iChartOption, this);
     callback(this.baseOption);
   }
 }

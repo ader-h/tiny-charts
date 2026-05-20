@@ -72,7 +72,7 @@ class JadeJueChart {
   setOption() { }
 
   resize(callback){
-    const adaptiveCloud = this.iChartOption.adaptive && this.iChartOption.theme?.includes('cloud');
+    const adaptiveCloud = this.iChartOption.adaptive && this.iChartOption.theme?.includes('hdesign');
     if (adaptiveCloud) {
       this.baseOption.legend = legend(this.iChartOption, 'JadeJueChart', this.chartInstance)
     }

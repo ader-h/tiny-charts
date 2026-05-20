@@ -18,7 +18,7 @@ function createPaging() {
 
     // 默认初始位置
     this.current = 0;
-    const isCloud = this.theme?.includes('cloud');
+    const isHdesign = this.theme?.includes('hdesign');
     let iconColor = Token.config.legendPageIconColor;
     let iconInactiveColor = Token.config.legendPageIconInactiveColor;
     // 创建paing
@@ -45,7 +45,7 @@ function createPaging() {
     pagingRightIcon.classList.add(CSS_CLASS.PAGING_ICON);
     pagingLeft.append(pagingLeftIcon);
     pagingRight.append(pagingRightIcon);
-    if (isCloud) {
+    if (isHdesign) {
         pagingLeft.innerHTML = "";
         pagingLeft.innerHTML = CLOUD_SVG_ICON.LEFT_ARROW;
         pagingLeft.setAttribute('style', `--pagingIconColor: ${iconInactiveColor};`);
@@ -61,7 +61,7 @@ function createPaging() {
         e.stopPropagation();
         if (this.current >= 1) {
             this.current--;
-            const isCloud = this.theme?.includes('cloud');
+            const isHdesign = this.theme?.includes('hdesign');
             // 展示当前分组页的图例
             this.group[this.current][this.group[this.current].length - 1].scrollIntoView({
                 behavior: "smooth",
@@ -72,7 +72,7 @@ function createPaging() {
 
             // 左按钮是否置灰
             if (this.current === 0) {
-                if (isCloud) {
+                if (isHdesign) {
                     pagingLeft.setAttribute('style', `--pagingIconColor: ${iconInactiveColor};`);
                 } else {
                     pagingLeftIcon.src = svgTransform(SVG_ICON.LEFT_ARROW);
@@ -80,7 +80,7 @@ function createPaging() {
                 }
             }
             
-            if (isCloud) {
+            if (isHdesign) {
                 pagingRight.setAttribute('style', `--pagingIconColor: ${iconColor};`);
             } else {
                 pagingRightIcon.src = svgTransform(SVG_ICON.RIGHT_ARROW);
@@ -96,7 +96,7 @@ function createPaging() {
         e.stopPropagation();
         if (this.current < this.group.length - 1) {
             this.current++;
-            const isCloud = this.theme?.includes('cloud');
+            const isHdesign = this.theme?.includes('hdesign');
             // 展示当前分组页的图例
             this.group[this.current][this.group[this.current].length - 1].scrollIntoView({
                 behavior: "smooth",
@@ -107,7 +107,7 @@ function createPaging() {
 
             // 右按钮是否置灰
             if (this.current + 1 === this.group.length) {
-                if (isCloud) {
+                if (isHdesign) {
                     pagingRight.setAttribute('style', `--pagingIconColor: ${iconInactiveColor};`);
                 }else{
                     pagingRightIcon.src = svgTransform(SVG_ICON.LEFT_ARROW);
@@ -115,7 +115,7 @@ function createPaging() {
                 }
             }
             
-            if (isCloud) {
+            if (isHdesign) {
                 pagingLeft.setAttribute('style', `--pagingIconColor: ${iconColor};`);
             } else {
                 pagingLeftIcon.src = svgTransform(SVG_ICON.RIGHT_ARROW);

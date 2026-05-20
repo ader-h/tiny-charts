@@ -37,7 +37,7 @@ function getBarWidth(stack) {
 
 // 文本与柱子居中对齐，文本与柱子的间距8（行高一半4+间距4）
 function getOffsetY() {
-  return chartToken.fontSize + 8
+  return chartToken.fontSize + 4//默认是8
 }
 
 // 进度图数据名称的series

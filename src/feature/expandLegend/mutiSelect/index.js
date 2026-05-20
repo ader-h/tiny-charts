@@ -85,8 +85,8 @@ class MutiSelect {
         const containerDom = this.container();
         const searchDom = search.call(this, containerDom);
         mutiselectDom.append(searchDom, containerDom);
-        if (this.option?.theme?.includes('cloud')) {
-            mutiselectDom.classList.add('cloud');
+        if (this.option?.theme?.includes('hdesign')) {
+            mutiselectDom.classList.add('hdesign');
             mutiselectDom.classList.add(this.option?.theme);
             mutiselectDom.setAttribute('style', `--nameColor: ${nameColor};--textColor: ${legendTextColor};--itemHoverBg: ${itemHoverBg}; --checkboxPathFill:${checkboxPathFill}; --iconInactiveColor:${iconInactiveColor};--legendDropDownBgColor:${legendDropDownBgColor}`)
             mutiselectDom.style['box-shadow'] = `0 ${tokenConfig.tooltipShadowOffsetY}px ${tokenConfig.tooltipShadowBlur}px 0 ${tokenConfig.tooltipShadowColor}`

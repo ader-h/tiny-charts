@@ -81,7 +81,7 @@ function setCircleRadius(radius, chartInstance, iChartOption, legend) {
   let barWidth = iChartOption.barWidth || chartToken.barWidth;
 
   // 2.自适应根据圆环占比部分决定圆环粗细
-  if (adaptive && theme.includes('cloud')) {
+  if (adaptive && theme.includes('hdesign')) {
     // TODO 下面部分没有用到
     if (theme.includes('hdesign') || theme.includes('bpit')) {
       if (legend.orient === 'horizontal') {

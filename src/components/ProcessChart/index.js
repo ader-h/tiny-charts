@@ -10,7 +10,7 @@
  *
  */
 import init from '../../option/init';
-import mini from '../../feature/mini/miniProcessChart';
+import miniProcess from '../../feature/mini/miniProcessChart';
 import RectCoordSys from '../../option/RectSys';
 import { PROCESSBARTYPE, CHARTTYPENAME } from './BaseOption';
 import handleData from './handleData';
@@ -19,6 +19,8 @@ import handleSeries, { setNameSeriesWidth } from './handleSeries';
 import cloneDeep from '../../util/cloneDeep';
 import { CHART_TYPE } from '../../util/constants';
 import { mergeSeries } from '../../util/merge';
+import setA2ui from '../../feature/a2ui';
+import updateWidth from '../BarChart/barChartOption';
 
 class ProcessChart {
 
@@ -30,6 +32,8 @@ class ProcessChart {
     this.baseOption = {};
     this.iChartOption = {};
     this.chartInstance = chartInstance;
+    this.chartName = CHART_TYPE.PROCESS;
+    this.dom = chartInstance._dom;
     // 组装 iChartOption, 补全默认值
     this.iChartOption = init(iChartOption);
     // 根据 iChartOption 组装 baseOption
@@ -65,7 +69,7 @@ class ProcessChart {
     // 合并用户自定义series
     mergeSeries(iChartOption, this.baseOption);
     // 处理特性
-    mini(iChartOption, this.baseOption);
+    miniProcess(iChartOption, this.baseOption);
   }
 
   getOption() {
@@ -84,6 +88,11 @@ class ProcessChart {
           nameSeries = element;
         }
     });
+    if (this.iChartOption.a2ui) {
+      setA2ui(this.iChartOption, this);
+      updateWidth(this.baseOption, this.chartInstance, {...this.iChartOption, type:'contain', direction: 'horizontal', rawBarwidth: 20});
+      miniProcess(this.iChartOption, this.baseOption);
+    }
     setNameSeriesWidth(nameSeries, this.dataSet, this.iChartOption, this.chartInstance);
     callback(this.baseOption, { notMerge: false })
   }

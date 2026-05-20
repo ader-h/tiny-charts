@@ -83,7 +83,7 @@ function item(data, index,color,itemStyle, that) {
             checkboxIcon.classList.add("active");
             checkboxIcon.src = svgTransform(SVG_ICON.TICK);
         }
-        if (this?.option?.theme?.includes('cloud') || that?.option?.theme?.includes('cloud')) {
+        if (this?.option?.theme?.includes('hdesign') || that?.option?.theme?.includes('hdesign')) {
             checkbox.innerHTML = CLOUD_SVG_ICON.CHECKBOX
         } else {
             checkbox.appendChild(checkboxIcon);

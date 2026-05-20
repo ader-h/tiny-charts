@@ -190,8 +190,8 @@ function handleStackTipFormatter(baseOpt, iChartOpt) {
       }
     });
     const isMobile = iChartOpt.isMobile ||mobile();
-    const isCloud = iChartOpt.theme?.includes('cloud');
-    config.isMobile = iChartOpt.adaptive && isCloud && isMobile;
+    const isHdesign = iChartOpt.theme?.includes('hdesign');
+    config.isMobile = iChartOpt.adaptive && isHdesign && isMobile;
     return getTooltipContentHtmlStr(config, baseOpt.tooltip)
   };
 }

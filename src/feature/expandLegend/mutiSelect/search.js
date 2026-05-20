@@ -74,7 +74,7 @@ function search(container) {
     );
     searchInput.classList.add(CSS_CLASS.SEARCH_INPUT);
     
-    if (this.option?.theme?.includes('cloud')) {
+    if (this.option?.theme?.includes('hdesign')) {
         searchInput.placeholder = "请输入关键词搜索";
         searchDom.innerHTML = CLOUD_SVG_ICON.SEARCH
         searchDom.append(searchInput);

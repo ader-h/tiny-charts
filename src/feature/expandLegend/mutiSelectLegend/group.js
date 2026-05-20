@@ -90,7 +90,7 @@ function group() {
 
     // 判断分页按钮是否需要替换
     if (this.current + 1 === this.group.length) {
-        if (!this.option?.theme?.includes('cloud')) {
+        if (!this.option?.theme?.includes('hdesign')) {
             this.pagingRightIcon.src = svgTransform(SVG_ICON.LEFT_ARROW);
         }
         this.pagingRightIcon.classList.add(CSS_CLASS.PAGING_ICON_ROTATE);

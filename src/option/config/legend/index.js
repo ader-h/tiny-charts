@@ -69,9 +69,9 @@ function legend(iChartOption, chartName, chartInstance) {
   if( legend.orient === 'vertical' ){
     setPolymorphism(legend, iChartOption)
   }
-  const isCloud = theme?.includes('cloud');
+  const isHdesign = theme?.includes('hdesign');
   // 图例设置超长滚动 cloud主题，增加宽度设定
-  if (legend.type === 'scroll' && isCloud && iChartOption.adaptive) {
+  if (legend.type === 'scroll' && isHdesign && iChartOption.adaptive) {
     const chartWidth = chartInstance?.getWidth?.() || chartInstance?.getDom?.()?.clientWidth || chartInstance?._dom?.clientWidth || 0;
     let padding = iChartOption.padding;
     let legendWidth = chartWidth - padding[1] - (padding[3] || padding[1]);
@@ -93,7 +93,7 @@ function legend(iChartOption, chartName, chartInstance) {
   // 开启图例自适应的图表
   const legendAdaptiveCharts = ['PieChart', 'PolarBarChart', 'JadeJueChart']; 
   const keyIsNameCharts = ['PolarBarChart', 'JadeJueChart']; 
-  if (legendAdaptiveCharts.includes(chartName) && isCloud && iChartOption.adaptive && legend.orient === 'vertical'){
+  if (legendAdaptiveCharts.includes(chartName) && isHdesign && iChartOption.adaptive && legend.orient === 'vertical'){
     if (!chartInstance) return;
     const dataArr = isArray(iChartOption.data) ? iChartOption.data : [];
     const xAxisKey = xkey(iChartOption);

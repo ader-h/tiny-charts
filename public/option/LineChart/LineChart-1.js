@@ -1,28 +1,67 @@
 const option = {
-    theme: 'light',
-    padding: [50, 30, 50, 20],
-    legend: {
-        show: true,
-        icon: 'line'
-    },
-    data: [
-        { 'Month': 'Jan', 'Domestic': 33, 'Abroad': 37 },
-        { 'Month': 'Feb', 'Domestic': 27, 'Abroad': 39 },
-        { 'Month': 'Mar', 'Domestic': 31, 'Abroad': 20 },
-        { 'Month': 'Apr', 'Domestic': 30, 'Abroad': 15 },
-        { 'Month': 'May', 'Domestic': 37, 'Abroad': 13 },
-        { 'Month': 'Jun', 'Domestic': 36, 'Abroad': 17 },
-        { 'Month': 'Jul', 'Domestic': 42, 'Abroad': 22 },
-        { 'Month': 'Aug', 'Domestic': 22, 'Abroad': 12 },
-        { 'Month': 'Sep', 'Domestic': 17, 'Abroad': 30 },
-        { 'Month': 'Oct', 'Domestic': 40, 'Abroad': 33 },
-        { 'Month': 'Nov', 'Domestic': 42, 'Abroad': 22 },
-        { 'Month': 'Dec', 'Domestic': 32, 'Abroad': 11 }
+    "data": [
+        {
+            "timestamp": "10:00",
+            "currentTraffic": 450,
+            "baselineTraffic": 420
+        },
+        {
+            "timestamp": "10:05",
+            "currentTraffic": 480,
+            "baselineTraffic": 430
+        },
+        {
+            "timestamp": "10:10",
+            "currentTraffic": 520,
+            "baselineTraffic": 440
+        },
+        {
+            "timestamp": "10:15",
+            "currentTraffic": 610,
+            "baselineTraffic": 450
+        },
+        {
+            "timestamp": "10:20",
+            "currentTraffic": 580,
+            "baselineTraffic": 460
+        },
+        {
+            "timestamp": "10:25",
+            "currentTraffic": 490,
+            "baselineTraffic": 455
+        },
+        {
+            "timestamp": "10:30",
+            "currentTraffic": 470,
+            "baselineTraffic": 450
+        },
+        {
+            "timestamp": "10:35",
+            "currentTraffic": 510,
+            "baselineTraffic": 445
+        },
+        {
+            "timestamp": "10:40",
+            "currentTraffic": 530,
+            "baselineTraffic": 440
+        },
+        {
+            "timestamp": "10:45",
+            "currentTraffic": 550,
+            "baselineTraffic": 435
+        }
     ],
-    xAxis: {
-        data: 'Month',
+    "xAxis": {
+        "data": "timestamp"
     },
-    yAxis: {
-        name: 'Percentage(%)'
+    "yAxisTitle": "流量 (Mbps)",
+    "smooth": true,
+    "color": [
+        "#0067D1",
+        "#C9C9C9"
+    ],
+    "a2ui": true,
+    "yAxis": {
+        "name": "流量 (Mbps)"
     }
-};
+}

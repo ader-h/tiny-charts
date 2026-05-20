@@ -725,8 +725,8 @@ export function setLimitFormatter(baseOption, iChartOption, seriesData) {
       config.children.push(dataItem)
     });
     const isMobile = iChartOption.isMobile || mobile();
-    const isCloud = iChartOption.theme?.includes('cloud');
-    config.isMobile = iChartOption.adaptive && isCloud && isMobile;
+    const isHdesign = iChartOption.theme?.includes('hdesign');
+    config.isMobile = iChartOption.adaptive && isHdesign && isMobile;
     return getTooltipContentHtmlStr(config, baseOption.tooltip);
   };
 }

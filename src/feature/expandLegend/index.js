@@ -49,8 +49,8 @@ function createMutiSelect(chartsIns) {
     const { width } = option.legend.upgrade;
     const container = document.createElement("div");
     container.classList.add(CSS_CLASS.CONTAINER);
-    if (iChartOption?.theme.includes('cloud')) {
-        container.classList.add('cloud');
+    if (iChartOption?.theme.includes('hdesign')) {
+        container.classList.add('hdesign');
         container.classList.add(iChartOption.theme);
     }
     const legendBar = document.createElement("div");
@@ -86,8 +86,8 @@ function createList(chartsIns) {
     const { dom: dom, eChartOption: option, iChartOption } = chartsIns;
     const container = document.createElement("div");
     container.classList.add(CSS_CLASS.LIST_CONTAINER);
-    if (iChartOption?.theme.includes('cloud')) {
-        container.classList.add('cloud')
+    if (iChartOption?.theme.includes('hdesign')) {
+        container.classList.add('hdesign')
     }
     if (option?.legend?.upgrade?.position === "underCanvas") {
         dom.insertAdjacentHTML("beforeend", container.outerHTML);
@@ -168,8 +168,8 @@ function createSingleSelectLegend(chartsIns){
     const { width } = option.legend.upgrade;
     const container = document.createElement("div");
     container.classList.add(CSS_CLASS.CONTAINER);
-    if (iChartOption?.theme.includes('cloud')) {
-        container.classList.add('cloud')
+    if (iChartOption?.theme.includes('hdesign')) {
+        container.classList.add('hdesign')
     }
     const legendBar = document.createElement("div");
     legendBar.classList.add(CSS_CLASS.SINGLESELECT_CONTAINER);

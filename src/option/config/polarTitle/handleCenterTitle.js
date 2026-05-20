@@ -33,7 +33,7 @@ export default function updateTitle(position, chartInstance, baseOption, iChartO
 
   // 计算自适应的中心文本大小 
   let fontSize;
-  if (adaptive && theme.includes('cloud')) {
+  if (adaptive && theme.includes('hdesign')) {
     // 外直径
     const circleDiameter = position.radius * 2;
     // 富文本计算字号

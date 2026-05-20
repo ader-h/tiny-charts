@@ -25,7 +25,7 @@ function more() {
     moreIcon.src = svgTransform(SVG_ICON.EVEN_MORE);
     more.classList.add(CSS_CLASS.MORE);
     more.appendChild(moreIcon);
-    if (this.theme?.includes('cloud')) {
+    if (this.theme?.includes('hdesign')) {
         more.innerHTML = "";
         more.innerHTML = CLOUD_SVG_ICON.EVEN_MORE;
         let moreColor = Token.config.legendPageTextColor;
@@ -76,7 +76,7 @@ function more() {
             // 对它们分组
             group.call(this);
             this.current = 0;
-            const isCloud = this.theme?.includes('cloud');
+            const isHdesign = this.theme?.includes('hdesign');
             // 分页按钮状态判断
             this.pagingText.innerText = `${this.current + 1}/${this.group.length > 0 ? this.group.length : 1}`;
             if (this.group.length < 2) {
@@ -84,17 +84,17 @@ function more() {
                 this.pagingRight.setAttribute('style', `--pagingIconColor: ${iconInactiveColor};`);
             }
             this.pagingLeftIcon.src = svgTransform(SVG_ICON.LEFT_ARROW);
-            if (!isCloud) {
+            if (!isHdesign) {
                 this.pagingLeftIcon.classList.remove(CSS_CLASS.PAGING_ICON_ROTATE);
             }
             if (this.current + 1 === this.group.length || this.group.length === 0) {
                 this.pagingRightIcon.src = svgTransform(SVG_ICON.LEFT_ARROW);
-                if (!isCloud) {
+                if (!isHdesign) {
                     this.pagingRightIcon.classList.add(CSS_CLASS.PAGING_ICON_ROTATE);
                 }
             } else {
                 this.pagingRightIcon.src = svgTransform(SVG_ICON.RIGHT_ARROW);
-                if (!isCloud) {
+                if (!isHdesign) {
                     this.pagingRightIcon.classList.remove(CSS_CLASS.PAGING_ICON_ROTATE);
                 }
             }

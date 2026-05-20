@@ -642,7 +642,7 @@ export function adapt(iChartOption, baseOption, containerWidth, containerHeight)
   const series = baseOption.series[0];
   const text = iChartOption.text || {};
   // 如果主题为华为云主题，并且开启配置项则开启自适应功能
-  if (theme && theme.indexOf('cloud')!=-1 && adaptive) {
+  if (theme && theme.indexOf('hdesign')!=-1 && adaptive) {
     // 初始值为宽度的80%
     let initRadius = containerWidth * 0.8;
     let radius = Math.max(120,Math.min(200,Math.min(initRadius,containerHeight))) / 2;

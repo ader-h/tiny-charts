@@ -209,7 +209,7 @@ function handleFormatter(tooltip, iChartOpt, radarKeys, data) {
   const alarmColor = Token.config.colorState.colorError;
   const isThreshold = !!(isObject(markLine) && markLine?.threshold);
   const isMobile = iChartOpt.isMobile || mobile();
-  const valueFontWeight = theme.includes('cloud') ? 'font-weight:bold;' : '';
+  const valueFontWeight = theme.includes('hdesign') ? 'font-weight:bold;' : '';
   tooltip.formatter = params => {
     const seriesdata = params.data;
     const dataName = seriesdata.name;
@@ -326,4 +326,18 @@ function setMarkLine(baseOpt, iChartOpt, radarKeys) {
   }
 }
 
-export { setRadar, getRadarKeys, getRadarMax, setTooltip, setMarkLine, initRadarSys, setRadarShape,handletipHtml ,checkValue};
+function setMiniRadar(baseOpt, iChartOpt) {
+  const {mini} = iChartOpt;
+  merge(baseOpt.radar[0], {
+    axisName:{
+      show: !mini
+    },
+    axisLabel:{
+      show: !mini
+    }
+  })
+  // baseOpt.tooltip.show = !mini;
+}
+
+
+export { setRadar, getRadarKeys, getRadarMax, setTooltip, setMarkLine, initRadarSys, setRadarShape,handletipHtml, checkValue, setMiniRadar};
