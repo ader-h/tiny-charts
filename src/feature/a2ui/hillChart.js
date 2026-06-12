@@ -1,20 +1,25 @@
 export default function getBarDefOpt(iChartOpt){
   let defOption = {
     padding: [32,2,0,2],
-    theme: iChartOpt.theme,
+    theme:  iChartOpt.theme,
     adaptive: true,
-    datazoom:{
-      left: 0
+    opacity: .8,
+    text: {
+      fontSize: '12',
+      show: true
     },
-    tooltip:{
-      show:true
+    coincide: '0%',
+    yAxisName: 'Units',
+    axis: {
+      show: true
     },
     yAxis:{
       splitNumber: 4
     },
     xAxis: {
       axisLabel:{
-        interval:'auto'
+        interval:'auto',
+        alignMaxLabel: 'right'
       }
     }
   }

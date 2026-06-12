@@ -1,11 +1,21 @@
 export default function getBarDefOpt(iChartOpt){
   let defOption = {
     padding: [32,2,0,2],
-    theme: iChartOpt.theme,
+    theme:  iChartOpt.theme,
     adaptive: true,
-    datazoom:{
-      left: 0
-    },
+    background: [{
+      name: 'error',
+      data: 100,
+    },{
+      name: 'warning',
+      data: 200,
+    },{
+      name: 'subwarning',
+      data: 300,
+    },{
+      name: 'success',
+      data: 400,
+    }],
     tooltip:{
       show:true
     },

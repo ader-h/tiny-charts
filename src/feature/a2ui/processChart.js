@@ -1,5 +1,18 @@
-export default{
-  padding: [12, 10, 10, 10],
-  theme: 'hdesign-light',
-  adaptive:true,
+export default function getBarDefOpt(iChartOpt){
+  let defOption = {
+     padding: [12, 0, 0, 0],
+      title:{
+        fontSize: 12,
+        position:[0,-14],
+        color:'#777777',
+      },
+      text:{
+        color:'#777777',
+        fontSize: 12,
+        offset:[0,-14]
+      },
+      theme:  iChartOpt.theme, 
+      adaptive: true
+  }
+  return defOption
 }

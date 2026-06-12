@@ -1,13 +1,10 @@
-export default function getPieDefOpt(iChartOpt){
+export default function defCircleProcessChartOption(iChartOpt){
   let defOption = {
     padding: [20,0,10,0],
     theme:  iChartOpt.theme,
     adaptive:true,
-    label:{
+    legend:{
       show:false
-    },
-    title: {
-      itemGap: 6
     }
   }
   return defOption
