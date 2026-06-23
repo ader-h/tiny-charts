@@ -68,7 +68,9 @@ class GaugeChart {
     const series = this.baseOption.series[0];
     const sizeData = handleSize(series,radiusSize);
     const text = this.iChartOption.text || {};
-    setA2ui(this.iChartOption, this);
+    if(this.iChartOption.a2ui) {
+      setA2ui(this.iChartOption, this);
+    }
     // 中间文本
     handleDetail(series, text, this.iChartOption.data,sizeData);
     // 内置状态仪表盘

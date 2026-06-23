@@ -666,7 +666,7 @@ export function adapt(iChartOption, baseOption, containerWidth, containerHeight)
       sizeData.valuePadding = 16;
     }
   
-    baseOption.series[0].axisLabel.show = false;
+    baseOption.series[0].axisLabel.show = iChartOption.axisLabel?.show ?? false;
     // baseOption.series[0].splitLine.show = false;
     // 非内置仪表盘 中间文本 主副文本的间距按需决定
     if(radius*2 >= 200) {
