@@ -39,7 +39,7 @@ function miniLine(iChartOption, baseOption) {
       Object.assign(item, {
         show: !mini,
         max: mini ? 'dataMax' : (yAxis?.max ? yAxis?.max : () => null),
-        min: 'dataMin',
+        min: mini ? 'dataMin' : (yAxis?.min ? yAxis?.min : () => null),
       });
     });
 

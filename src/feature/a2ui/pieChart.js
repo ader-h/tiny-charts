@@ -4,7 +4,7 @@ export default function getPieDefOpt(iChartOpt){
     theme:  iChartOpt.theme,
     adaptive:true,
     label:{
-      show:false
+      show: iChartOpt.label?.show ?? false
     },
     title: {
       itemGap: 6
