@@ -13,7 +13,8 @@ export default function getBarDefOpt(iChartOpt){
       left: 'auto'
     },
     yAxis:{
-      splitNumber: 4
+      splitNumber: 4,
+      name: iChartOpt.yAxisTitle || ''
     },
     xAxis: {
       axisLabel:{

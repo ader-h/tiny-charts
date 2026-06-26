@@ -17,7 +17,7 @@ import defCircleProcessChartOption from "./circleProcessChart";
 import defBarLineOption from "./barLineChart";
 import defHeatMapOption from "./heatMapChart";
 import defSankeyOption from "./sankeyChart";
-import defTreeOption from "./treeMapChart"; 
+import defTreeMapOption from "./treeMapChart"; 
 
 function setMiniChart(iChartOption, that){
   const { chartName } = that
@@ -57,8 +57,8 @@ function setMiniChart(iChartOption, that){
     }
   } else {
     iChartOption.mini = false;
-    if (!['ProcessChart', 'GaugeChart','CircleProcessChart'].includes(chartName)) {
-      iChartOption.legend.show = true
+    if (!['ProcessChart', 'GaugeChart','CircleProcessChart'].includes(chartName) && iChartOption.legend) {
+      iChartOption.legend.show = true;
     }
     if(dataZoom){
       delete dataZoom.left
@@ -87,12 +87,13 @@ function setA2ui(iChartOption, that){
     get BarLineChart() { return defBarLineOption(iChartOption) },
     get HeatMapChart() { return defHeatMapOption(iChartOption) },
     get SankeyChart() { return defSankeyOption(iChartOption) },
-    get TreeChart() { return defTreeOption(iChartOption) }
+    get TreeMapChart() { return defTreeMapOption(iChartOption) }
   }
 
   merge(iChartOption, defaultOption[chartName])
 
   // 判断是否使用mini图表
+
   setMiniChart(iChartOption, that);
 }
 

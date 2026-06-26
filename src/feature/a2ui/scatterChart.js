@@ -14,6 +14,9 @@ export default function getBarDefOpt(iChartOpt){
         interval:'auto',
         alignMaxLabel: 'right'
       }
+    },
+    yAxis: {
+      name: iChartOpt.yAxisTitle || ''
     }
   }
   return defOption

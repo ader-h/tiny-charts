@@ -13,7 +13,8 @@ export default function getLineDefOpt(iChartOpt){
       left: 'auto'
     },
     yAxis:{
-      splitNumber: 4
+      splitNumber: 4,
+      name: iChartOpt.yAxisTitle || ''
     },
     xAxis: {
       fullGrid: true,
@@ -24,9 +25,9 @@ export default function getLineDefOpt(iChartOpt){
       }
     }
   }
-  const dataLen = Object.keys(iChartOpt.data[0]) || 0;
-  if ( dataLen < 5 ){
-    defOption.area = true
-  }
+
+  const dataLen = Object.keys(iChartOpt.data[0]).length || 0;
+  const defArea = dataLen < 5  ? true : false;
+  defOption.area = iChartOpt.area !== undefined ? iChartOpt.area : defArea;
   return defOption
 }

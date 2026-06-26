@@ -3,6 +3,7 @@ export default function getPieDefOpt(iChartOpt){
     padding: [20,0,10,0],
     theme:  iChartOpt.theme,
     adaptive:true,
+    data: iChartOpt.data,
     label:{
       show: iChartOpt.label?.show ?? false
     },
@@ -22,7 +23,8 @@ export default function getPieDefOpt(iChartOpt){
     },
     title: {
       itemGap: 6
-    }
+    },
+    type: 'circle'
   }
   if (iChartOpt.legendPosition === 'bottomCenter'){
     defOption.legend = {
@@ -33,6 +35,9 @@ export default function getPieDefOpt(iChartOpt){
       },
       orient: 'horizontal'
     }
+  }
+  if(iChartOpt && !iChartOpt.title?.text) {
+    defOption.type = iChartOpt?.type || 'pie'
   }
   return defOption
 }
