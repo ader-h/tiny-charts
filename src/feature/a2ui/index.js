@@ -14,10 +14,10 @@ import defHillOption from "./hillChart";
 import defJadeJueOption from "./jadeJueChart";
 import defScatterOption from "./scatterChart";
 import defCircleProcessChartOption from "./circleProcessChart";
-import defBarLineOption from "./BarLineChart";
-import defHeatMapOption from "./HeatMapChart";
+import defBarLineOption from "./barLineChart";
+import defHeatMapOption from "./heatMapChart";
 import defSankeyOption from "./sankeyChart";
-import defTreeOption from "./treeChart"; 
+import defTreeOption from "./treeMapChart"; 
 
 function setMiniChart(iChartOption, that){
   const { chartName } = that
