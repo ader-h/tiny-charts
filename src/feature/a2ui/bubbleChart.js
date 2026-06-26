@@ -6,12 +6,19 @@ export default function getBarDefOpt(iChartOpt){
     tooltip:{
       show:true
     },
+    legend:{
+      show: true,
+      top: 2,
+      right: 6,
+      left: 'auto'
+    },
     yAxis:{
       splitNumber: 4
     },
     xAxis: {
       axisLabel:{
-        interval:'auto'
+        interval:'auto',
+        alignMaxLabel: 'right'
       }
     }
   }

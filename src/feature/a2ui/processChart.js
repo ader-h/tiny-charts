@@ -11,8 +11,11 @@ export default function getBarDefOpt(iChartOpt){
         fontSize: 12,
         offset:[0,-14]
       },
-      theme:  iChartOpt.theme, 
-      adaptive: true
+       theme:  iChartOpt.theme, 
+       legend:{
+        show: false
+       },
+       adaptive: true
   }
   return defOption
 }

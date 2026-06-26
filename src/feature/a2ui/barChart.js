@@ -9,12 +9,21 @@ export default function getBarDefOpt(iChartOpt){
     tooltip:{
       show:true
     },
+    legend:{
+      show: true,
+      top: 2,
+      right: 6,
+      left: 'auto'
+    },
     yAxis:{
       splitNumber: 4
     },
     xAxis: {
+      fullGrid: true,
       axisLabel:{
-        interval:'auto'
+        interval:'auto',
+        alignMinLabel: 'left',
+        alignMaxLabel: 'right'
       }
     }
   }

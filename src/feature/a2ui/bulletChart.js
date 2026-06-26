@@ -19,16 +19,23 @@ export default function getBarDefOpt(iChartOpt){
     tooltip:{
       show:true
     },
+    legend:{
+      show: true,
+      top: 2,
+      right: 6,
+      left: 'auto'
+    },
     yAxis:{
       splitNumber: 4
     },
     xAxis: {
       axisLabel:{
-        interval:'auto'
+        interval:'auto',
+        alignMaxLabel: 'right'
       }
     }
   }
-  if (iChartOpt.direction === 'horizontal'){
+  if (iChartOpt.direction === 'horizontal') {
     defOption.yAxis.axisLabel = {
       alignMaxLabel: 'right'
     }

@@ -7,6 +7,13 @@ export default function getGaugeDefOpt(iChartOpt){
         show: false
       }
     },
+    legend: {
+      show: false
+    },
+    position: {
+      center: ['50%','50%'],
+      radius: '65%'
+    },
     adaptive: true
   }
   return defOption

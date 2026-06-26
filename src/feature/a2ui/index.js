@@ -14,76 +14,10 @@ import defHillOption from "./hillChart";
 import defJadeJueOption from "./jadeJueChart";
 import defScatterOption from "./scatterChart";
 import defCircleProcessChartOption from "./circleProcessChart";
-
-
-
-function defaultA2uiOption(iChartOption, that) {
-  const { padding } = iChartOption;
-  const { chartName } = that;
-  let defOption = {
-    legend: {}
-  };
-  let position = {};
-  const RectShapeCharts = ['LineChart', 'BarChart', 'BubbleChart', 'HillChart', 'BulletChart', 'ScatterChart'];
-  const PolarShapeCharts = ['RadarChart', 'GaugeChart', 'PieChart']
-  if (RectShapeCharts.includes(chartName) ) {
-    defOption = {
-      legend:{
-        show: true,
-        top: 2,
-        right: 6,
-        left: 'auto'
-      },
-      xAxis: {
-        axisLabel:{
-          interval:'auto',
-          alignMaxLabel: 'right'
-        }
-      }
-    }
-  }
-  if (PolarShapeCharts.includes(chartName) ) {
-    defOption = {
-      legend: ['RadarChart', 'GaugeChart'].includes(chartName) ? {}:{
-        show:true,
-        top: 'center',
-        left: '68%',
-        orient: 'vertical'
-      },
-      position: {
-        center: ['RadarChart', 'GaugeChart'].includes(chartName) ? ['50%','50%'] : ['35%','50%'],
-        radius: '65%'
-      }
-    }
-  }
-  if(chartName === 'JadeJueChart') {
-     defOption = {
-      legend: ['RadarChart', 'GaugeChart'].includes(chartName) ? {}:{
-        show:true,
-        top: 'center',
-        left: '68%',
-        orient: 'vertical'
-      }
-    }
-  }
-
-  if (['ProcessChart', 'GaugeChart', 'RadarChart','CircleProcessChart'].includes(chartName)) {
-    defOption.legend.show = false
-  }
-  if (['LineChart'].includes(chartName)) {
-    defOption.xAxis.fullGrid = true;
-    defOption.xAxis.axisLabel = {
-      alignMinLabel: 'left',
-      alignMaxLabel: 'right'
-    }
-  }
-
-  return {
-    padding: padding || [32, 4, 4, 0],
-    ...defOption
-  }
-
-}
+import defBarLineOption from "./BarLineChart";
+import defHeatMapOption from "./HeatMapChart";
+import defSankeyOption from "./sankeyChart";
+import defTreeOption from "./treeChart"; 
 
 function setMiniChart(iChartOption, that){
   const { chartName } = that
@@ -150,12 +84,14 @@ function setA2ui(iChartOption, that){
     get JadeJueChart() { return defJadeJueOption(iChartOption) },
     get ScatterChart() { return defScatterOption(iChartOption) },
     get CircleProcessChart() { return defCircleProcessChartOption(iChartOption) },
+    get BarLineChart() { return defBarLineOption(iChartOption) },
+    get HeatMapChart() { return defHeatMapOption(iChartOption) },
+    get SankeyChart() { return defSankeyOption(iChartOption) },
+    get TreeChart() { return defTreeOption(iChartOption) }
   }
 
   merge(iChartOption, defaultOption[chartName])
 
-  // 图例在顶部
-  merge(iChartOption, defaultA2uiOption(iChartOption, that));
   // 判断是否使用mini图表
   setMiniChart(iChartOption, that);
 }

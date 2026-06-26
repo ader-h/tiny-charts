@@ -13,6 +13,12 @@ export default function getBarDefOpt(iChartOpt){
     axis: {
       show: true
     },
+    legend:{
+      show: true,
+      top: 2,
+      right: 6,
+      left: 'auto'
+    },
     yAxis:{
       splitNumber: 4
     },

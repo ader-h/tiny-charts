@@ -6,13 +6,14 @@ export default function getRadarDefOpt(iChartOpt){
     legend: {
       show: true,
       position: {
-        left: '64%',
-        top: 'center'
+        left: 'center',
+      bottom: 2
       },
-      orient: 'vertical',
+      orient: 'horizontal'
     },
     position: {
-      center: ['30%', '50%']
+      center: ['50%','50%'],
+      radius: '65%'
     },
     radar: {
       axisName: {
