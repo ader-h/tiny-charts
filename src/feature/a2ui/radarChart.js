@@ -1,4 +1,4 @@
-export default function getRadarDefOpt(iChartOpt){
+function getRadarDefOpt(iChartOpt){
   let defOption = {
     padding: [20, 0, 10, 0],
     theme:  iChartOpt.theme,
@@ -26,3 +26,5 @@ export default function getRadarDefOpt(iChartOpt){
   }
   return defOption
 }
+
+module.exports = getRadarDefOpt;

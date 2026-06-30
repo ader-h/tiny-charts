@@ -1,4 +1,4 @@
-export default function defCircleProcessChartOption(iChartOpt){
+function defCircleProcessChartOption(iChartOpt){
   let defOption = {
     padding: [20,0,10,0],
     theme:  iChartOpt.theme,
@@ -9,3 +9,5 @@ export default function defCircleProcessChartOption(iChartOpt){
   }
   return defOption
 }
+
+module.exports = defCircleProcessChartOption;

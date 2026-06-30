@@ -1,4 +1,4 @@
-export default function getPieDefOpt(iChartOpt){
+function getPieDefOpt(iChartOpt){
   let defOption = {
     padding: [20,0,10,0],
     theme:  iChartOpt.theme,
@@ -41,3 +41,5 @@ export default function getPieDefOpt(iChartOpt){
   }
   return defOption
 }
+
+module.exports = getPieDefOpt;

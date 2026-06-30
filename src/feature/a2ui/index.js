@@ -1,23 +1,23 @@
-import merge from "../../util/merge";
-import defBarOption from "./barChart";
-import defLineOption from "./lineChart";
-import defGaugeOption from "./gaugeChart";
-import defProcessOption from "./processChart";
-import defRadarOption from "./radarChart";
-import defPieOption from "./pieChart";
+const merge = require("../../util/merge");
+const defBarOption = require("./barChart");
+const defLineOption = require("./lineChart");
+const defGaugeOption = require("./gaugeChart");
+const defProcessOption = require("./processChart");
+const defRadarOption = require("./radarChart");
+const defPieOption = require("./pieChart");
 
-import defAssembleBubbleOption from "./assembleBubbleChart";
-import defBubbleOption from "./bubbleChart";
-import defBulletOption from "./bulletChart";
-import defFunnelOption from "./funnelChart";
-import defHillOption from "./hillChart";
-import defJadeJueOption from "./jadeJueChart";
-import defScatterOption from "./scatterChart";
-import defCircleProcessChartOption from "./circleProcessChart";
-import defBarLineOption from "./barLineChart";
-import defHeatMapOption from "./heatMapChart";
-import defSankeyOption from "./sankeyChart";
-import defTreeMapOption from "./treeMapChart"; 
+const defAssembleBubbleOption = require("./assembleBubbleChart");
+const defBubbleOption = require("./bubbleChart");
+const defBulletOption = require("./bulletChart");
+const defFunnelOption = require("./funnelChart");
+const defHillOption = require("./hillChart");
+const defJadeJueOption = require("./jadeJueChart");
+const defScatterOption = require("./scatterChart");
+const defCircleProcessChartOption = require("./circleProcessChart");
+const defBarLineOption = require("./barLineChart");
+const defHeatMapOption = require("./heatMapChart");
+const defSankeyOption = require("./sankeyChart");
+const defTreeMapOption = require("./treeMapChart");
 
 function setMiniChart(iChartOption, that){
   const { chartName } = that
@@ -97,4 +97,4 @@ function setA2ui(iChartOption, that){
   setMiniChart(iChartOption, that);
 }
 
-export default setA2ui;
+module.exports = setA2ui;

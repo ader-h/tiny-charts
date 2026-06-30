@@ -1,4 +1,4 @@
-export default function getBarDefOpt(iChartOpt) {
+function getBarDefOpt(iChartOpt) {
   const getMaxValue = (data) => {
     if (data && data.length > 0) {
       return Math.max(...data.map((item) => item.value))
@@ -29,3 +29,5 @@ export default function getBarDefOpt(iChartOpt) {
 
   return defOption
 }
+
+module.exports = getBarDefOpt;

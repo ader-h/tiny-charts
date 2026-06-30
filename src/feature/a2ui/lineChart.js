@@ -1,4 +1,4 @@
-export default function getLineDefOpt(iChartOpt){
+function getLineDefOpt(iChartOpt){
   let defOption = {
     padding: [32,2,0,2],
     theme:  iChartOpt.theme,
@@ -31,3 +31,5 @@ export default function getLineDefOpt(iChartOpt){
   defOption.area = iChartOpt.area !== undefined ? iChartOpt.area : defArea;
   return defOption
 }
+
+module.exports = getLineDefOpt;

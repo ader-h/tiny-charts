@@ -1,4 +1,4 @@
-export default function getGaugeDefOpt(iChartOpt){
+function getGaugeDefOpt(iChartOpt){
   let defOption = {
     padding: [20,0,10,1],
     theme:  iChartOpt.theme,
@@ -18,3 +18,5 @@ export default function getGaugeDefOpt(iChartOpt){
   }
   return defOption
 }
+
+module.exports = getGaugeDefOpt;
