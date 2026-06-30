@@ -9,7 +9,7 @@
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
  *
  */
-import { isObject, isArray } from '../util/type';
+const { isObject, isArray } = require('../util/type');
 
 // 将 task 中所有属性合并到 target
 function merge(target, task) {
@@ -69,10 +69,8 @@ function mergeExtend(iChartOption, baseOption) {
     }
 }
 
-export {
-    mergeSeries,
-    mergeExtend,
-    mergeVisualMap
-}
+merge.mergeSeries = mergeSeries;
+merge.mergeExtend = mergeExtend;
+merge.mergeVisualMap = mergeVisualMap;
 
-export default merge;
+module.exports = merge;
