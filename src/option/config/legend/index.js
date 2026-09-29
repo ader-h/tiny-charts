@@ -17,14 +17,10 @@ import textStyle from './textStyle';
 import itemStyle from './itemStyle';
 import merge from '../../../util/merge';
 import setPolymorphism from './polymorphism';
-import xkey from '../xAxis/xkey';
-import ldata from './ldata';
-import { updateLegendOccupancy, setMobileLegend } from './calculate';
-import { isArray } from '../../../util/type';
-import mobile from '../../../util/mobile';
-import createSvgLegend from '../../../feature/svgLegend';
+import legendAdaptive from './adaptive';
 
-function legend(iChartOption, chartName, chartInstance) {
+
+function legend(iChartOption, chartName, echartsIns) {
   const selfLegend = iChartOption.legend;
   const theme = iChartOption.theme
   const {
@@ -34,7 +30,7 @@ function legend(iChartOption, chartName, chartInstance) {
     formatter,
     selectedMode,
   } = selfLegend;
-  const legend = base();
+  let legend = base();
   // 控制显示
   if (!show) {
     legend.show = false;
@@ -60,6 +56,7 @@ function legend(iChartOption, chartName, chartInstance) {
   legend.itemGap = selfLegend.itemGap || legend.itemGap;
   // 数据
   legend.data = data;
+  
   // 配置图例富文本样式
   textStyle(legend, selfLegend.textStyle);
   merge(legend, iChartOption.legend);
@@ -69,36 +66,8 @@ function legend(iChartOption, chartName, chartInstance) {
   if( legend.orient === 'vertical' ){
     setPolymorphism(legend, iChartOption)
   }
-  // svg 图例
-  if (iChartOption.legend.svg) {
-    const cartesianAxisCharts = ['BarChart', 'LineChart', 'BarLineChart', 'LineChart', 'BulletChart', 'CandlestickChart'];
-    const dataArr = isArray(iChartOption.data) ? iChartOption.data : [];
-    const xAxisKey = xkey(iChartOption);
-    const lData = ldata(dataArr, xAxisKey) || [];
-    const key = isArray(lData) ? lData[0] : undefined;
-    let legendData = legend.data ||  key ? dataArr.map((item) => item?.[key]) || [] : [];
-    if (cartesianAxisCharts.includes(chartName)){
-      legendData = legend.data || lData;
-    }
-    createSvgLegend(legend, legendData, chartInstance, iChartOption)
-  }
-  // 开启图例自适应的图表
-  const legendAdaptiveCharts = ['PieChart', 'PolarBarChart', 'JadeJueChart']; 
-  const isCloud = theme?.includes('cloud');
-  if (legendAdaptiveCharts.includes(chartName) && isCloud && iChartOption.adaptive && legend.orient === 'vertical'){
-    if (!chartInstance) return;
-    const dataArr = isArray(iChartOption.data) ? iChartOption.data : [];
-    const xAxisKey = xkey(iChartOption);
-    const lData = ldata(dataArr, xAxisKey) || [];
-    const key = isArray(lData) ? lData[0] : undefined;
-    const legendData = legend.data || key ? dataArr.map((item) => item?.[key]) || [] : [];
-    const isMobile = mobile();
-    if (isMobile) {
-      setMobileLegend(iChartOption, legend, legendData, chartInstance);
-    }else{
-      updateLegendOccupancy(iChartOption, legend, legendData, chartInstance);
-    }
-  }
+  // 图例自适应
+  legend = legendAdaptive(iChartOption, legend, echartsIns, chartName)
   return legend;
 }
 

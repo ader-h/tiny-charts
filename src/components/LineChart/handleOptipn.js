@@ -13,9 +13,9 @@ import cloneDeep from '../../util/cloneDeep';
 import chartToken from './chartToken';
 import { judgeFilterAreaSeries, getDataWidthNoObject } from './AreaChart/bottomArea';
 import getTooltipContentHtmlStr, { validateName } from '../../option/config/tooltip/formatter'
-import { isObject } from '../../util/type';
+import { isArray, isObject } from '../../util/type';
 import { getColor } from '../../util/color';
-
+import mobile from '../../util/mobile';
 
 // 给图例和x轴赋值
 export function handleData(baseOpt, legendData, xAxisData) {
@@ -104,38 +104,54 @@ function defaultFormatter(params, color, iChartOpt, hideEmpty, tooltip) {
     hideEmpty
   }
   let seriesNames = [];
-  params.forEach((item, index) => {
-    let value = item.value;
-    let name = item.seriesName;
-    if ((iChartOpt.area || iChartOpt.discrete) && seriesNames.includes(name)) {
-      return;
-    }else{
-      seriesNames.push(name);
-      if (isObject(value)){
-        iChartOpt.data.forEach(data=>{
-          if (data.product === value?.product) {
-            value = data[name];
-          }
-        })
+  if (isArray(params)) {
+    params.forEach((item, index) => {
+      let value = item.value;
+      let name = item.seriesName;
+      let type = iChartOpt.legend?.icon;
+      if ((iChartOpt.area || iChartOpt.discrete) && seriesNames.includes(name)) {
+        return;
+      }else{
+        seriesNames.push(name);
+        if (isObject(value)){
+          iChartOpt.data.forEach(data=>{
+            if (data.product === value?.product) {
+              value = data[name];
+            }
+          })
+        }
+        if (index === 0) {
+          config.title = item.name
+        }
+        const iconColor = validateName(value) ? item.color : getColor(color, item.seriesIndex)
+        const dataItem = {
+          name,
+          value,
+          iconColor,
+          type
+        }
+        config.children.push(dataItem)
       }
-      if (index === 0) {
-        config.title = item.name
-      }
-      const iconColor = validateName(value) ? item.color : getColor(color, item.seriesIndex)
-      const dataItem = {
-        name,
-        value,
-        iconColor,
-      }
-      config.children.push(dataItem)
+    });
+  } else if(isObject(params)) {
+    const dataItem = {
+      name: params.seriesName || '',
+      value: params.value || '',
+      iconColor: validateName(params.value) ? params.color : getColor(color, params.seriesIndex),
+      type: iChartOpt.legend?.icon
     }
-  });
+    config.children.push(dataItem)
+    config.title = params.name
+  }
+  const isMobile = iChartOpt.isMobile || mobile();
+  const isCloud = iChartOpt.theme?.includes('cloud');
+  config.isMobile = iChartOpt.adaptive && isCloud && isMobile;
   return getTooltipContentHtmlStr(config, tooltip)
 }
 
 // 阈值场景将data中的数据转为obj，需要转换回来
 function coverObjDataToInit(params) {
-  if (params && params.length !== 0) {
+  if (params && isArray(params) && params.length !== 0) {
     return params.map(item => {
       const data = isObject(item.data) ? item.data.value : item.data
       return { ...item, data }
@@ -150,13 +166,18 @@ export function setTooltip(baseOpt, iChartOpt, legendData) {
   const filterArea = judgeFilterAreaSeries(iChartOpt)
   const isFilter = discrete || predict || filterArea
   const formatter = tipHtml || tooltip?.formatter
-  baseOpt.tooltip.formatter = (echartsParams, ticket, callback) => {
-    let params = echartsParams
-    if (isFilter) {
-      const lineNumber = legendData.length
-      params = echartsParams.slice(0, lineNumber)
+  const valueFormatter = tooltip?.valueFormatter
+  if (valueFormatter) {
+    baseOpt.tooltip.valueFormatter = valueFormatter
+  } else {
+    baseOpt.tooltip.formatter = (echartsParams, ticket, callback) => {
+      let params = echartsParams
+      if (isFilter) {
+        const lineNumber = legendData.length
+        params = echartsParams.slice(0, lineNumber)
+      }
+      const initParams = coverObjDataToInit(params)
+      return formatter && typeof formatter === 'function' ? formatter(initParams, ticket, callback) : defaultFormatter(initParams, color, iChartOpt, baseOpt.tooltip?.hideEmpty, baseOpt.tooltip)
     }
-    const initParams = coverObjDataToInit(params)
-    return formatter && typeof formatter === 'function' ? formatter(initParams, ticket, callback) : defaultFormatter(initParams, color, iChartOpt, baseOpt.tooltip?.hideEmpty, baseOpt.tooltip)
   }
 }

@@ -26,6 +26,7 @@ import { lttb } from '../../feature/performance/lttb';
 import { handleMarkLineMax } from '../../option/config/mark';
 import { CHART_TYPE } from '../../util/constants';
 import { isArray, isObject } from '../../util/type';
+import legendAdaptive from '../../option/config/legend/adaptive';
 
 class LineChart {
 
@@ -35,6 +36,7 @@ class LineChart {
     this.baseOption = {};
     this.baseOption = cloneDeep(BaseOption);
     this.iChartOption = {};
+    this.chartInstance = chartInstance;
     getDatasetData(iChartOption);
     // 组装 iChartOption, 补全默认值
     this.iChartOption = init(iChartOption);
@@ -77,7 +79,7 @@ class LineChart {
       colors: iChartOption.color
     });
     // 设置VisualMap，通过数值映射颜色
-    this.baseOption.visualMap = setVisualMap(legendData, seriesData, iChartOption, this.baseOption);
+    this.baseOption.visualMap = setVisualMap(legendData, seriesData, iChartOption, this.baseOption, this);
     // 针对预测值图表需求，图表需要进行特殊处理
     handlePredict(this.baseOption, iChartOption);
     // 是否关闭hover态的效果，默认为false
@@ -165,7 +167,7 @@ class LineChart {
    * _extent是一个数组，_extent[0]为该轴上最小值，_extent[1]为该轴上最大值
    */
   getYAxisMaxValue(echartsIns, index) {
-    return echartsIns?.getModel()?.getComponent('yAxis', index)?.axis?.scale?._extent?.[1] || 1;
+    return echartsIns?.getModel?.()?.getComponent('yAxis', index)?.axis?.scale?._extent?.[1] || echartsIns?.getModel?.()?.getComponent('yAxis', index)?.axis?.scale?._extent?.[0]?.[1]  || 1;
   }
 
   /**
@@ -175,7 +177,16 @@ class LineChart {
    * _extent是一个数组，_extent[0]为该轴上最小值，_extent[1]为该轴上最大值
    */
   getYAxisMinValue(echartsIns, index) {
-    return echartsIns?.getModel()?.getComponent('yAxis', index)?.axis?.scale?._extent?.[0] || 0;
+    return echartsIns?.getModel?.()?.getComponent('yAxis', index)?.axis?.scale?._extent?.[0] || echartsIns?.getModel?.()?.getComponent('yAxis', index)?.axis?.scale?._extent?.[0]?.[0] || 0;
+  }
+
+  resize(callback) {
+    // 坐标轴二次计算
+    if (this.iChartOption.adaptive || this.iChartOption.legend?.svg) {
+      AdaptiveRectSys(this.baseOption, this.iChartOption, this.chartInstance, this)
+      this.baseOption.legend = legendAdaptive(this.iChartOption, this.baseOption.legend, this.chartInstance, 'LineChart');
+      callback(this.baseOption, { notMerge: false });
+    }
   }
 }
 

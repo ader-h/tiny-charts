@@ -95,31 +95,33 @@ export function setRadius(baseOption, chartInstance, iChartOption) {
   const width = chartInstance?.getWidth?.();
   const height = chartInstance?.getHeight?.();
   const canvasRadius = Math.min(width / 2, height / 2);
-  //内圆-4为纠正为实际显示尺寸
+  //-2为去除borderWidth带来的粗细影响
   if (isNumber(radius)) {
-    baseOption.polar.radius = [radius - barWidth - 4, radius];
+    baseOption.polar.radius = [radius - barWidth - 2, radius];
   } else if (isString(radius)) {
     let newRadius = radius.includes('%') ? percentToDecimal(radius) * Math.min(chartInstance?.getWidth?.() / 2, chartInstance?.getHeight?.() / 2) : parseFloat(radius);
-    baseOption.polar.radius = [newRadius - barWidth - 4, newRadius];
+    baseOption.polar.radius = [newRadius - barWidth - 2, newRadius];
   } else {
     if (radius.length === 1) {
       // 数组1项时，根据barWidth补齐内圆
       let outerRing = radius[0].includes('%') ? percentToDecimal(radius[0]) * canvasRadius : parseFloat(radius[0]);
-      baseOption.polar.radius = [outerRing - barWidth - 4, radius[0]];
+      baseOption.polar.radius = [outerRing - barWidth - 2, radius[0]];
     } else {
       baseOption.polar.radius = radius;
     }
   }
   if (!iChartOption.position) iChartOption.position = {};
   let position = handleCenterPosition(iChartOption, baseOption.legend, chartInstance);
-  if (position && position.radius) {
-    let outerRing = position.radius;
-    iChartOption.position.radius = position.radius
-    baseOption.polar.radius = [outerRing - barWidth - 4, outerRing];
-  }
-  if (position && position.center) {
-    baseOption.polar.center = position.center;
-    iChartOption.position.center = position.center
+  if (iChartOption.adaptive ) {
+    if (position && position.radius) {
+      let outerRing = position.radius;
+      iChartOption.position.radius = position.radius
+      baseOption.polar.radius = [outerRing - barWidth - 2, outerRing];
+    }
+    if (position && position.center) {
+      baseOption.polar.center = position.center;
+      iChartOption.position.center = position.center
+    }
   }
 }
 

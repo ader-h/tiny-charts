@@ -1,3 +1,15 @@
+/**
+ * Copyright (c) 2024 - present OpenTiny HUICharts Authors.
+ * Copyright (c) 2024 - present Huawei Cloud Computing Technologies Co., Ltd.
+ *
+ * Use of this source code is governed by an MIT-style license.
+ *
+ * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
+ * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
+ * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
+ *
+ */
+
 import Token from "../token";
 import { isArray, isNumber } from "../../util/type";
 
@@ -17,6 +29,10 @@ function createSvgLegend(legend, legendData, chartInstance, iChartOption) {
   let legendStartX;
   let legendStartRight;
   let legendStartY;
+  // 存储点击记录
+  if (!legend.legendState) {
+    legend.legendState = {};
+  }
   if (hasSvgCharts) { //是否charts为svg渲染
     svgLegend = container.querySelector('svg');
     const items = svgLegend.querySelectorAll('.legend-svg');
@@ -29,6 +45,7 @@ function createSvgLegend(legend, legendData, chartInstance, iChartOption) {
     } else {
       svgLegend = document.createElementNS(svgNS, 'svg');
       svgLegend.setAttribute('id', 'hui-legend-svg');
+      svgLegend.setAttribute('class', 'hui-legend-svg');
     }
     svgLegend.setAttribute('width', containerRect.width);
     svgLegend.setAttribute('height', containerRect.height);
@@ -49,11 +66,12 @@ function createSvgLegend(legend, legendData, chartInstance, iChartOption) {
     legendStartY = containerRect.height - Number(bottom) -16
   }
 
-  let totalWidth = legendStartX || 0 ;
+  let totalWidth =  0 ;
+  let startX = legendStartX || 0 ;
   const g = document.createElementNS(svgNS, 'g');
-  g.setAttribute('class', 'legend-svg')
+  g.setAttribute('class', 'legend-svg');
   svgLegend.appendChild(g);
-  let option = {startX:totalWidth, legend, legendData, svgLegend, svgNS, hasSvgCharts, container, iChartOption, chartInstance, legendWidth, legendStartY, g}
+  let option = {startX, legend, legendData, svgLegend, svgNS, hasSvgCharts, container, iChartOption, chartInstance, legendWidth, legendStartY, g}
   const config = createLegend(option)
 
   // 二次渲染 根据一次渲染的宽度与高度 计算出实际的位置
@@ -63,26 +81,31 @@ function createSvgLegend(legend, legendData, chartInstance, iChartOption) {
   if (totalWidth > legendWidth){
     totalWidth -= (lastItemWidth + 6 - 20)
   }
+  if (config.truncateIndex){
+    totalWidth = legendWidth
+  }
   // 图例渲染开始位置
-  let startX;
-  if (legend.left === 'center' || (legend.left===undefined && legend.right=== 'center')) {
+  if (legend.left === 'center' || legend.left === 'auto' || (legend.left===undefined && (legend.right=== 'center' || legend.right=== 'auto'))) {
     startX = (containerRect.width - totalWidth)/2
   } else if (legendStartRight) {
     startX = legendStartRight - totalWidth;
   } else {
     startX = legendStartX;
   }
-  option = {startX, legend, legendData, svgLegend, svgNS, hasSvgCharts, container, iChartOption, chartInstance, legendWidth, legendStartY, g}
-  createLegend(option, true)
+  if (startX < 0) {
+    startX = !isNaN(Number(left)) ? Number(left) : (iChartOption.padding?.[3] || iChartOption.padding?.[1] || 0);
+  }
+  option = {startX, legend, legendData, svgLegend, svgNS, hasSvgCharts, container, iChartOption, chartInstance, legendWidth, legendStartY, g, right, left}
+  const legendConfig = createLegend(option, true);
   
   // 创建点击图例
   svgLegend.onclick = (event) => {
-    handleSvgClick(event,{ container, legendData, chartInstance})
+    handleSvgClick(event, { container, legendData, chartInstance, legend, initialIndex: legendConfig.truncateIndex})
   }
 }
 
 function createLegend(option, secondaryRender){
-  let {startX, legend, legendData, svgLegend, svgNS, hasSvgCharts, container, iChartOption, chartInstance, legendWidth, legendStartY,g} = option;
+  let {startX, legend, legendData, svgLegend, svgNS, hasSvgCharts, container, iChartOption, chartInstance, legendWidth, legendStartY, g, right, left} = option;
   let itemGap = legend.itemGap || legend.itemGap || 6;
   let itemWidth;
   let totalWidth = 0;
@@ -92,24 +115,47 @@ function createLegend(option, secondaryRender){
   let truncateIndex ;
   for (let index = 0; index < legendData.length; index++) {
     const item = legendData[index];
+    let preItem = legendData[index-1];
     const type = item.icon || iChartOption.legend?.icon || legend.icon || 'rect';
     const style = {
       x: startX,
       y:  legendStartY || 0 ,
-      padding: '',
+      padding: iChartOption.padding,
       width: legend.itemWidth || 12,
       height: legend.itemHeight || 12,
       itemGap: itemGap,
       color: item.color || Token.config.colorGroup[index] || '',
       fontSize,
-      fontFamily
+      fontFamily,
+      legendLeft: left,
+      legendRight: right
     }
     const name = item.name || item;
-    itemWidth = createItem(g, type, style, svgNS, name, index, legend, legendWidth, secondaryRender)
+    const itemConfig = createItem(g, type, style, svgNS, name, index, legend, legendWidth, secondaryRender);
+    // 这个节点文本都没有足够宽度渲染
+    if(itemConfig.preTruncation && preItem){
+      truncateIndex = index - 1;
+      if (secondaryRender) {
+        style.x = startX;
+        createEllipsis(g, type, style, svgNS, name, index+1);
+        createDropDown(container, legend, legendData, index+1, iChartOption, chartInstance);
+      }
+      break;
+    }
+    itemWidth = itemConfig.itemWidth;
     startX += itemWidth;
     // style.x = startX;
     totalWidth += (index === 0) ? itemWidth : (itemWidth + itemGap); // 加上间隙
-    if ((totalWidth + 24) > legendWidth) { //24为省略号占宽 加 间隙
+    if (itemConfig.truncation) {
+      truncateIndex = index;
+      if (secondaryRender) {
+        style.x = startX;
+        createEllipsis(g, type, style, svgNS, name, index+1);
+        createDropDown(container, legend, legendData, index+1, iChartOption, chartInstance);
+      }
+      break;
+    }
+    if ((totalWidth + 22) > legendWidth) { //22为省略号占宽 加 间隙
       let childNode = g.children;
       let length = childNode.length;
       truncateIndex = index;
@@ -129,7 +175,7 @@ function createLegend(option, secondaryRender){
   } else {
     totalWidth = totalWidth  + itemGap * (legendData.length - 1);
   }
-  return {totalWidth, itemWidth}
+  return {totalWidth, itemWidth, truncateIndex}
 }
 
 // 转化位置信息
@@ -153,45 +199,49 @@ function getLegendWidth(legend, chartInstance, iChartOption) {
   const right = legend.right;
   let userWidth = legend.width;
   userWidth = !isNaN(Number(userWidth)) ? userWidth : (userWidth?.includes?.('%') ? Number(userWidth.slice(0, -1)) * width / 100 : userWidth || 0);
-  if (!isNaN(Number(userWidth))) return userWidth;
-  let legendWidth = 0;
-  const padding = iChartOption.padding || iChartOption.chartPadding;
-  let LRGrid = 0;//左右间隙
-  if ( isArray(padding) ){
-    LRGrid = padding.length === 4 ? padding[1]+padding[3] : padding[1] *2 
+  if (!isNaN(Number(userWidth))) return Number(userWidth);
+  let legendWidth = width;
+  if (left === 'center' || left === 'auto') {
+    legendWidth -=  (iChartOption.padding?.[3] || 0)
   }
-  width -= LRGrid // 去除左右间隙
-  if (left === 'center' || right === 'center') {
-    legendWidth = width
-  } else if (!isNaN(Number(left))) {
-    legendWidth = width - left
-  } else if (left?.includes?.('%')) {
-    legendWidth = width - Number(left.slice(0, -1)) * width / 100
-  } else if (!isNaN(Number(right))) {
-    legendWidth = width - right
-  } else if (right?.includes?.('%')) {
-    legendWidth = width - Number(right.slice(0, -1)) * width / 100
+  if (right === 'center' || right === 'auto') {
+    legendWidth -= (iChartOption.padding?.[1] || 0)
   }
+  if (!isNaN(Number(left))) {
+    legendWidth -= Number(left)
+  }
+  if (!isNaN(Number(right))) {
+    legendWidth -= Number(right)
+  }
+  if (left?.includes?.('%')) {
+    legendWidth -= (Number(left.slice(0, -1)) * width / 100) + iChartOption.padding?.[1] || 0
+  }
+  if (right?.includes?.('%')) {
+    legendWidth -= (Number(right.slice(0, -1)) * width / 100) + iChartOption.padding?.[3] || 0
+  }
+
   return legendWidth
 }
 
 // 创建单项图例
 function createItem(svg, type, style, svgNS, name, index, legend, legendWidth, secondaryRender) {
-  let { x, y, padding, width, height, color, itemGap, fontSize, fontFamily} = style;
+  let { x, y, padding, width, height, color, itemGap, fontSize, fontFamily, legendLeft, legendRight} = style;
   const inactiveColor = Token.config.legendInactiveColor;
   const legendTextColor = Token.config.legendTextColor;
   let icon;
   let itemWidth;
   let iconY;
+  const startX = x + itemGap * index;
   const g = document.createElementNS(svgNS, 'g');
+  const active = legend.legendState[name] !== undefined && !legend.legendState[name] ? 'inactive' : '';
   g.setAttribute('style', `--inactiveColor:${inactiveColor};`);
-  g.setAttribute('class', `legend-svg-item`);
+  g.setAttribute('class', `legend-svg-item ${active}`);
   g.setAttribute('index', index);
   switch (type) {
     case 'circle':
       const radius = (width > height ? height : width) / 2;
       icon = document.createElementNS(svgNS, 'circle');
-      icon.setAttribute('cx', (x + itemGap * index) + radius*2);
+      icon.setAttribute('cx', startX + radius*2);
       icon.setAttribute('cy', y + radius + 2);
       icon.setAttribute('r', radius);
       break;
@@ -217,12 +267,12 @@ function createItem(svg, type, style, svgNS, name, index, legend, legendWidth, s
         icon.setAttribute('d', url);
       } else {
         icon = document.createElementNS(svgNS, 'circle')
-        icon.setAttribute('cx', (x + itemGap * index) + radius*2);
+        icon.setAttribute('cx', startX + radius*2);
         icon.setAttribute('cy', y + radius +1);
         icon.setAttribute('r', radius);
       }
   }
-  icon.setAttribute('x', x + itemGap * index);
+  icon.setAttribute('x', startX);
   icon.setAttribute('y', iconY ? iconY: y);
   icon.setAttribute('width', width);
   icon.setAttribute('height', height);
@@ -231,7 +281,7 @@ function createItem(svg, type, style, svgNS, name, index, legend, legendWidth, s
   icon.setAttribute('index', index);
   g.appendChild(icon)
   const legendText = document.createElementNS(svgNS, 'text');
-  legendText.setAttribute('x', (x + width + itemGap * index + 6));// 文本与icon间隙6
+  legendText.setAttribute('x', (startX + width + 6));// 文本与icon间隙6
   legendText.setAttribute('y', y);
   legendText.setAttribute('transform', `translate(0 10)`);
   legendText.setAttribute('index', index);
@@ -243,29 +293,56 @@ function createItem(svg, type, style, svgNS, name, index, legend, legendWidth, s
   g.appendChild(legendText);
   svg.appendChild(g);
   itemWidth = legendText.getBBox().width + width + 6;// 文本与icon间隙6
-  if (secondaryRender && index === 0 && itemWidth > legendWidth){ // 第一项就超出宽度时截断显示
+  let gRect = svg.getBoundingClientRect();
+  if (secondaryRender && ((gRect?.width || 0) + 22 + itemGap + width) > legendWidth){ // 超出宽度时截断显示 22是省略号
     const textLength = name.length;
-    const newTextLength = Math.trunc(textLength * (legendWidth / itemWidth)) - 8; // 减4为空格 加 ... 的位置
-    const newText = name.slice(0, newTextLength) + ' ...'
-    legendText.innerHTML = newText
-    return legendText.getBBox().width + width + 6;
+    let itemWidth = legendText.getBBox().width + width + 6; // icon占宽 + 间隙
+    let newText;
+    // 计算可显多少个文本((图例最大宽 - (节点的起始坐标 - 左边距 + 实际占宽 + ...宽度)) / 文本宽)   减3为 ... 的字符
+    legendLeft = isNumber(Number(legendLeft)) && !isNaN(Number(legendLeft)) ? Number(legendLeft) : padding[3] || 0
+    let newTextLength = Math.trunc(textLength * ((legendWidth - (startX - legendLeft + width + 6)) / itemWidth)) - 4; 
+    newTextLength = newTextLength < 0 ? 0 : newTextLength;
+    if (textLength !== newTextLength) {
+      newText = name.slice(0, newTextLength) + ' ...'
+      legendText.innerHTML = newText
+    }
+    itemWidth = legendText.getBBox().width + width + 6;
+    if(newTextLength === 0){
+      g.remove();
+      return {itemWidth, preTruncation: true, truncation: false};
+    }
+    return {itemWidth, truncation: true};
   }
-  return itemWidth;
+  return {itemWidth, truncation: false};
 }
 
 // 创建省略号
 function createEllipsis(svg, type, style, svgNS, name, index) {
   const { x, y, padding, width, height, color, itemGap } = style;
-  const legendTextColor = Token.config.legendTextColor;
-  const ellipsis = document.createElementNS(svgNS, 'text');
-  ellipsis.setAttribute('type', 'ellipsis');
+  const legendEllipsisColor = Token.config.legendPageTextColor;
+  
+  let ellipsis = document.createElementNS(svgNS, 'g');
   ellipsis.setAttribute('class', 'legend-svg-ellipsis');
-  ellipsis.setAttribute('x', x  + itemGap * index - 8); 
-  ellipsis.setAttribute('y', y);
-  ellipsis.setAttribute('transform', `translate(0 8)`);
-  ellipsis.setAttribute('fill', legendTextColor);
-  ellipsis.setAttribute('style', `font-size:18px; `);
-  ellipsis.textContent = '...';
+  ellipsis.setAttribute('type', 'ellipsis');
+  const rect = document.createElementNS(svgNS, 'rect');
+  rect.setAttribute('class', 'legend-svg-ellipsis');
+  rect.setAttribute('type', 'ellipsis');
+  rect.setAttribute('width', '16');
+  rect.setAttribute('height', '16');
+  rect.setAttribute('x', x  + itemGap * index - 4); 
+  rect.setAttribute('y', y);
+  rect.setAttribute('fill', 'none');
+  ellipsis.appendChild(rect);
+  for (let i = 0; i < 3; i++) {
+    const spot = document.createElementNS(svgNS, 'circle');
+    spot.setAttribute('class', 'legend-svg-ellipsis');
+    spot.setAttribute('type', 'ellipsis');
+    spot.setAttribute('cx', x  + itemGap * index + i*4); 
+    spot.setAttribute('cy', y + 6);
+    spot.setAttribute('r', 1);
+    spot.setAttribute('fill', legendEllipsisColor);
+    ellipsis.appendChild(spot);
+  }
   svg.appendChild(ellipsis);
 }
 
@@ -275,7 +352,7 @@ function createDropDown(container, legend, legendData, initialIndex, iChartOptio
   const colorGroup = iChartOption.color || tokenConfig.colorGroup;
   const inactiveColor = Token.config.legendInactiveColor;
   const legendTextColor = Token.config.legendTextColor;
-  const itemHoverBg = Token.config.legendDropDownItemHover
+  const itemHoverBg = Token.config.legendDropDownItemHover;
   let svgLegendDropdown = container.getElementsByClassName('hui-legend-dropdown')[0];
   if (svgLegendDropdown) {
     svgLegendDropdown.innerHTML = ''
@@ -288,28 +365,41 @@ function createDropDown(container, legend, legendData, initialIndex, iChartOptio
 
   svgLegendDropdown.style['box-shadow'] = `0 ${tokenConfig.tooltipShadowOffsetY}px ${tokenConfig.tooltipShadowBlur}px 0 ${tokenConfig.tooltipShadowColor}`
   let dom = '';
-  for (let index = initialIndex; index < legendData.length; index++) {
+  for (let index = initialIndex - 1; index < legendData.length; index++) {
     const item = legendData[index];
-    const icon = item.icon || legend.icon;
-    dom += `<div class="hui-legend-dropdown-item" index="${index}" style="--inactiveColor:${inactiveColor}; --textColor: ${legendTextColor}; --iconColor: ${colorGroup[index]};"><div class="hui-legend-dropdown-icon ${icon}" index="${index}"></div><div index="${index}" class="hui-legend-dropdown-text">${item}</div></div>`
+    const name = item.name || item;
+    const active = legend.legendState[name] !== undefined && !legend.legendState[name] ? 'inactive' : '';
+    const icon = item.icon || iChartOption.legend?.icon || legend.icon;
+    dom += `<div class="hui-legend-dropdown-item ${active}" index="${index}" style="--inactiveColor:${inactiveColor}; --textColor: ${legendTextColor}; --iconColor: ${colorGroup[index]};"><div class="hui-legend-dropdown-icon ${icon}" index="${index}"></div><div index="${index}" class="hui-legend-dropdown-text">${name}</div></div>`
   }
   svgLegendDropdown.innerHTML = dom;
   container.appendChild(svgLegendDropdown);
   // 创建点击切换图形
   svgLegendDropdown.onclick = (event) => {
-    handleSelectLegend(event,{container, legendData, chartInstance})
+    handleSelectLegend(event, {container, legendData, chartInstance, initialIndex, legend})
   }
 }
 
 // 图例点击事件
 function handleSvgClick(e, option){
   let target = e.target;
-  let {container, legendData, chartInstance} = option;
+  let {container, legendData, chartInstance, legend, initialIndex} = option;
   if (target.getAttribute('type') === 'ellipsis') {
-    showDropDown(e, container)
+    showDropDown(e, container, legend)
   } else if (target.getAttribute('index')) {
     let index = Number(target.getAttribute('index'));
+    if (initialIndex === index) {
+      const svgCon = container.getElementsByClassName('hui-legend-dropdown-item');
+      for (let i = 0; i < svgCon.length; i++) {
+        const item = svgCon[i];
+        if (Number(item.getAttribute('index')) === index ){
+          item.classList.toggle('inactive')
+        }
+        continue;
+      }
+    }
     let name = legendData[index];
+    legend.legendState[name] = legend.legendState[name] !== undefined ? !legend.legendState[name] : false;
     let parentNode = target.tagName === 'g' ? target : target.parentNode;
     parentNode.classList.toggle('inactive');
     chartInstance.dispatchAction({
@@ -320,22 +410,41 @@ function handleSvgClick(e, option){
 }
 
 // 下拉框展开事件
-function showDropDown(e, container){
+function showDropDown(e, container, legend){
   const dropDown = container.getElementsByClassName('hui-legend-dropdown')[0];
-  const containerRect = container.getBoundingClientRect()
-  const width = dropDown.clientWidth
-  const height = dropDown.clientHeight
-  let left = e.clientX - containerRect.left;
-  let top = e.clientY - containerRect.top + 8;
-  if ((left + width) > containerRect.width) {
-    left -= width - 5;
+  const containerRect = container.getBoundingClientRect();
+  const width = dropDown.clientWidth;
+  dropDown.style['max-width'] = (containerRect.width - 16) + 'px';
+  let height = dropDown.clientHeight;
+  let top = transformPosition(legend.top, containerRect.height);
+  let bottom = transformPosition(legend.bottom, containerRect.height);
+
+  top = top === undefined ? containerRect.height - (bottom || 0) - 20 : top;// 20 为图例区占高
+  
+  let dropDownLeft = e.clientX - containerRect.left;
+  let dropDownTop = e.clientY - containerRect.top + 8;
+  let topSpace = isNumber(top) ? top : containerRect.height - bottom - 16;
+  let bottomSpace = isNumber(bottom) ? bottom : containerRect.height - top - 16;
+  if ((dropDownLeft + width) > containerRect.width) {
+    dropDownLeft -= width - 5; //预留间隙，避免与边框重合
   }
-  if ((top + height) > containerRect.height) {
-    top -= height + 16;
+  if (dropDownLeft < 8){
+    dropDownLeft = 8;
+  }
+  if ((dropDownTop + height) > containerRect.height) {
+    if (topSpace > bottomSpace) {
+      top -= 4 + height;
+      height = top - 4; //预留间隙，避免与边框重合
+    } else {
+      height = bottomSpace - 4;//预留间隙，避免与边框重合
+    }
+  } else {
+    top += 20;
   }
   dropDown.classList.toggle('show');
-  dropDown.style.left = left + 'px';
+  dropDown.style.left = dropDownLeft + 'px';
   dropDown.style.top = top + 'px';
+  dropDown.style['max-height'] = height + 'px';
   let flag = false;
   const hideDropDown = (event)=>{
     if (!flag) {
@@ -355,11 +464,22 @@ function showDropDown(e, container){
 // 下拉框点击切换图
 function handleSelectLegend(e, option){
   let target = e.target;
-  let {container, legendData, chartInstance} = option
+  let {container, legendData, chartInstance, initialIndex, legend} = option
   if (target.getAttribute('index')) {
     let index = Number(target.getAttribute('index'));
     let name = legendData[index];
+    legend.legendState[name] = legend.legendState[name] !== undefined ? !legend.legendState[name] : false;
     let parentNode = target.classList.contains('hui-legend-dropdown-item') ? target : target.parentNode;
+    if ((initialIndex - 1) === index) {
+      const svgCon = container.getElementsByClassName('legend-svg-item');
+      for (let i = 0; i < svgCon.length; i++) {
+        const item = svgCon[i];
+        if(Number(item.getAttribute('index')) === index) {
+          item.classList.toggle('inactive');
+          continue;
+        }
+      }
+    }
     parentNode.classList.toggle('inactive');
     chartInstance.dispatchAction({
       type: "legendToggleSelect",
